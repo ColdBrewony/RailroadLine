@@ -21,6 +21,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import tools.jackson.databind.ObjectMapper;
@@ -31,8 +32,12 @@ import tools.jackson.databind.ObjectMapper;
  *
  * <p>작업 디렉터리가 프로젝트 루트({@code data/raw/lines}가 상대경로로 보이는 위치)일 때만 동작한다.
  * 이미 적재된 노선(name+segmentLabel 기준)은 건너뛰어 재시작해도 중복 적재되지 않는다.
+ *
+ * <p>{@link com.futek.railroad.layout.DiagramLayoutRunner}가 이 시더 다음에 실행되어야 하므로
+ * 순서를 명시한다.
  */
 @Component
+@Order(1)
 public class DataSeeder implements ApplicationRunner {
 
     private static final Logger log = LoggerFactory.getLogger(DataSeeder.class);
