@@ -281,11 +281,69 @@ body {
   position: absolute;
   right: 12px;
   bottom: 56px;
+  left: 12px;
   background: var(--color-surface);
   border: 1px solid var(--color-border);
   border-radius: 8px;
   padding: 12px;
   max-width: 260px;
+  margin-left: auto;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  z-index: 15;
+}
+
+#legend h3 {
+  margin: 0 0 8px;
+  font-size: 13px;
+}
+
+#legend ul {
+  list-style: none;
+  margin: 0 0 8px;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12px;
+}
+
+#legend li {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.legend-swatch {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  flex: 0 0 auto;
+}
+
+.legend-swatch-normal {
+  background: var(--color-accent);
+}
+
+.legend-swatch-transfer {
+  background: #ffffff;
+  border: 3px solid var(--color-accent);
+  width: 14px;
+  height: 14px;
+}
+
+.legend-swatch-selected {
+  background: var(--color-accent);
+  border: 3px solid #d32f2f;
+  width: 14px;
+  height: 14px;
+}
+
+.legend-note {
+  margin: 0;
+  font-size: 11px;
+  color: var(--color-text-muted);
+  line-height: 1.5;
 }
 
 #station-detail-panel {
@@ -294,6 +352,10 @@ body {
   border-left: 1px solid var(--color-border);
   overflow-y: auto;
   position: relative;
+}
+
+#detail-drag-handle {
+  display: none;
 }
 
 #detail-close {
@@ -454,6 +516,23 @@ body {
     border-top: 1px solid var(--color-border);
     border-radius: 12px 12px 0 0;
     box-shadow: 0 -4px 16px rgba(0, 0, 0, 0.12);
+    padding-top: 14px;
     z-index: 40;
+  }
+
+  #detail-drag-handle {
+    display: block;
+    position: absolute;
+    top: 8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 36px;
+    height: 4px;
+    border-radius: 999px;
+    background: var(--color-border);
+  }
+
+  #legend {
+    max-width: none;
   }
 }
