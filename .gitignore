@@ -35,3 +35,6 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### Database (H2 file-mode, runtime-generated) ###
+data/railroad-db.*
