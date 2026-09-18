@@ -1,6 +1,8 @@
 # 04. 백엔드 API 설계
 
-전제: `02-data-model.md`의 엔티티(Region/Line/Station/LineStation)와 `01-requirements.md`의 기능 요구사항(F1~F6)을 기준으로 설계한다. 내부 도구이므로 인증/속도제한 등은 최소화하고, 조회(read) 위주 API에 집중한다.
+전제: `02-data-model.md`(v2)의 엔티티(Line/Station/LineStation)와 `01-requirements.md`의 기능 요구사항(F1~F6)을 기준으로 설계한다. 내부 도구이므로 인증/속도제한 등은 최소화하고, 조회(read) 위주 API에 집중한다.
+
+> **v2 반영**: `02-data-model.md`가 실데이터 기준으로 단순화되면서(Region 엔티티 제거, category 필드 제거) 아래 API도 함께 수정했다.
 
 ## 1. 기술 스택 결정 (제안)
 
@@ -16,7 +18,7 @@
 
 ```
 com.futek.railroad
- ├─ domain          // JPA 엔티티: Region, Line, Station, LineStation, enum들
+ ├─ domain          // JPA 엔티티: Line, Station, LineStation, enum들(StationType, LineStatus)
  ├─ repository       // Spring Data JPA Repository 인터페이스
  ├─ service          // 검색/조회 비즈니스 로직
  ├─ web              // @RestController + DTO
@@ -59,8 +61,8 @@ F2(역 검색) 대응.
 {
   "total": 2,
   "items": [
-    { "stationId": 101, "name": "동대구", "regionName": "대구본부", "lineNames": ["경부선", "경부고속선", "대구선"] },
-    { "stationId": 205, "name": "동대전", "regionName": "대전충남본부", "lineNames": ["경부선"] }
+    { "stationId": 101, "name": "동대구", "lineNames": ["경부선", "경부고속선", "대구선"] },
+    { "stationId": 205, "name": "동대전", "lineNames": ["경부선"] }
   ]
 }
 ```
@@ -75,7 +77,6 @@ F3(역 상세 정보) 대응. 환승역이면 `lines` 배열에 노선별 항목
 {
   "stationId": 101,
   "name": "동대구",
-  "regionName": "대구본부",
   "stationType": "MANAGED",
   "isKtxStop": true,
   "diagramX": 812.0,
@@ -84,6 +85,7 @@ F3(역 상세 정보) 대응. 환승역이면 `lines` 배열에 노선별 항목
     {
       "lineId": 3,
       "lineName": "경부선",
+      "lineStatus": "OPERATING",
       "sequenceNo": 42,
       "cumulativeKm": 288.5,
       "prevStation": { "stationId": 100, "name": "대구", "distanceKm": 4.0 },
@@ -92,6 +94,7 @@ F3(역 상세 정보) 대응. 환승역이면 `lines` 배열에 노선별 항목
     {
       "lineId": 7,
       "lineName": "대구선",
+      "lineStatus": "OPERATING",
       "sequenceNo": 1,
       "cumulativeKm": 0.0,
       "prevStation": null,
@@ -105,19 +108,21 @@ F3(역 상세 정보) 대응. 환승역이면 `lines` 배열에 노선별 항목
 
 | 파라미터 | 필수 | 설명 |
 |---|---|---|
-| `category` | N | `LineCategory` 필터 (고속철도/일반철도/광역전철/화물전용선) |
-| `region` | N | 해당 본부를 지나는 노선만 필터 |
+| `status` | N | `LineStatus` 필터 (기본은 `OPERATING`만, `all=true`로 전체 조회 가능) |
+| `q` | N | 노선명 부분 일치 검색 |
 
 응답 예:
 
 ```json
 {
-  "total": 107,
+  "total": 68,
   "items": [
-    { "lineId": 3, "name": "경부선", "category": "CONVENTIONAL_RAIL", "colorHex": "#0052A4", "totalDistanceKm": 441.7, "stationCount": 58 }
+    { "lineId": 3, "name": "경부선", "segmentLabel": null, "status": "OPERATING", "colorHex": "#0052A4", "totalDistanceKm": 441.7, "stationCount": 92 }
   ]
 }
 ```
+
+> `colorHex`는 원본 데이터에 없는 값으로, 노선도 렌더링을 위해 백엔드에서 노선별로 결정적으로(예: id 기반 해시) 배정하거나 프론트엔드에서 계산한다.
 
 ### 4.4 노선 상세 — `GET /api/lines/{lineId}`
 
@@ -127,7 +132,9 @@ F4(노선 상세 정보) 대응. 소속 역을 순서대로 반환.
 {
   "lineId": 3,
   "name": "경부선",
-  "category": "CONVENTIONAL_RAIL",
+  "segmentLabel": null,
+  "status": "OPERATING",
+  "regionNames": ["서울본부", "수도권서부본부", "대전충남본부", "대구본부", "부산경남본부"],
   "totalDistanceKm": 441.7,
   "stations": [
     { "stationId": 98, "name": "서울", "sequenceNo": 1, "cumulativeKm": 0.0, "isTransfer": true },
@@ -163,19 +170,12 @@ F1(노선도 시각화) 대응. 프론트엔드가 전체 노선도를 그리기
 }
 ```
 
-### 4.6 본부 목록 — `GET /api/regions`
-
-필터 UI용 보조 API.
-
-```json
-{ "items": [ { "regionId": 1, "name": "서울본부", "hqStationName": "서울" } ] }
-```
-
 ## 5. 서비스 계층 설계 메모
 
 - `StationSearchService`: 부분 일치 검색 — 1차는 `LIKE '%q%'` 기반 JPA 쿼리로 충분(데이터 규모가 크지 않음, 전체 역 수는 지도 기준 수천 개 이하로 추정). 이후 성능 이슈 시 인덱스/전문검색(예: DB LIKE → 정규화된 검색 컬럼) 도입 검토.
 - `StationDetailService`: 특정 역의 모든 `LineStation` 행을 조회 후 노선별로 그룹핑, 각 그룹에서 이전/다음 역을 `sequence_no ± 1`로 조회.
 - `DiagramService`: `lineIds` 파라미터 유무에 따라 전체/부분 조회, `diagram_x/y`가 아직 없는 역(Phase 4 이전)은 null로 반환 — 프론트엔드가 좌표 없는 경우를 처리할 수 있어야 함(개발 중간 단계 대응).
+- 기본적으로 목록/검색 API는 `LineStatus = OPERATING`인 노선만 보여주고, 폐선/중지/미개통 노선은 명시적으로 요청했을 때만 포함한다(내부 도구지만 검색 결과에 이용 불가능한 노선이 섞이지 않도록).
 
 ## 6. 다음 단계
 
