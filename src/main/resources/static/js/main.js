@@ -2,6 +2,7 @@ import { getState, setState, subscribe } from "./state.js";
 import "./search.js";
 import "./detailPanel.js";
 import "./lineList.js";
+import "./diagram.js";
 
 const sidebar = document.getElementById("line-list-sidebar");
 const backdrop = document.getElementById("sidebar-backdrop");
