@@ -256,10 +256,16 @@ body {
 }
 
 .diagram-station-label {
-  font-size: 10px;
+  font-size: 11px;
+  font-weight: 600;
   fill: var(--color-text);
   pointer-events: none;
   display: none;
+  /* 점이나 다른 노선 위를 글자가 지나가도 읽히도록 흰색 테두리(halo)를 깐다. */
+  paint-order: stroke;
+  stroke: var(--color-surface);
+  stroke-width: 3px;
+  stroke-linejoin: round;
 }
 
 /* 확대(줌인)했을 때만 역 이름을 표시해 전체 지도가 글자로 뒤덮이지 않게 한다. */

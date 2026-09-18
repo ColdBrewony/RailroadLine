@@ -49,14 +49,16 @@ resetViewBtn.addEventListener("click", () => {
 loadDiagram();
 
 subscribe((state) => {
+  let stationChanged = false;
   if (state.selectedStationId !== currentStationId) {
     currentStationId = state.selectedStationId;
+    stationChanged = true;
     highlightSelectedStation(currentStationId);
     if (currentStationId != null && diagramData) {
       focusOnStation(currentStationId);
     }
   }
-  if (state.selectedLineId !== currentLineId) {
+  if (state.selectedLineId !== currentLineId || stationChanged) {
     currentLineId = state.selectedLineId;
     highlightSelectedLine(currentLineId);
   }
@@ -189,13 +191,15 @@ function highlightSelectedStation(stationId) {
 }
 
 function highlightSelectedLine(lineId) {
+  const activeStationId = getState().selectedStationId;
   linePathEls.forEach((path, id) => {
     path.classList.toggle("diagram-line-active", id === lineId);
     path.classList.toggle("diagram-line-dimmed", lineId != null && id !== lineId);
   });
   stationNodeEls.forEach((group, id) => {
     const st = stationIndex.get(id);
-    const related = lineId == null || (st && st.lineIds.has(lineId));
+    // 검색/클릭으로 선택된 역은 다른 노선이 강조된 상태여도 항상 보이게 한다.
+    const related = lineId == null || (st && st.lineIds.has(lineId)) || id === activeStationId;
     group.classList.toggle("diagram-station-dimmed", !related);
   });
 }
