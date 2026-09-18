@@ -226,6 +226,44 @@ body {
   width: 100%;
   height: 100%;
   display: block;
+  touch-action: none;
+  cursor: grab;
+  user-select: none;
+}
+
+#diagram-svg:active {
+  cursor: grabbing;
+}
+
+.diagram-placeholder {
+  font-size: 15px;
+  fill: var(--color-text-muted);
+}
+
+.diagram-placeholder-sub {
+  font-size: 12px;
+  fill: var(--color-text-muted);
+}
+
+.diagram-line-title {
+  font-size: 14px;
+  font-weight: 600;
+  fill: var(--color-text);
+}
+
+.diagram-station {
+  cursor: pointer;
+}
+
+.diagram-station-label {
+  font-size: 10px;
+  fill: var(--color-text);
+  pointer-events: none;
+}
+
+.diagram-station-active {
+  stroke: #d32f2f !important;
+  stroke-width: 4 !important;
 }
 
 #legend-toggle {
