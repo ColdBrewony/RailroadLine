@@ -1,0 +1,15 @@
+{
+  "lineName": "익산삼각선",
+  "segmentLabel": null,
+  "originStation": "목천신호소",
+  "terminusStation": "동익산",
+  "totalDistanceKmOfficial": 3.4,
+  "region": ["전북본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "목천신호소", "cumulativeKm": 0.0, "stationType": "SIGNAL_STATION", "isKtxStop": false, "remarks": "장항선과 접속" },
+    { "name": "동익산", "cumulativeKm": 3.4, "stationType": "FREIGHT", "isKtxStop": false, "remarks": "종점, 전라선과 접속, 공식 총거리와 정확히 일치" }
+  ],
+  "verification": { "officialTotalKm": 3.4, "computedTotalKm": 3.4, "match": true },
+  "sourceNotes": "장항선과 전라선을 잇는 삼각선."
+}

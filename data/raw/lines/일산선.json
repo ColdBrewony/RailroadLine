@@ -1,0 +1,24 @@
+{
+  "lineName": "일산선",
+  "segmentLabel": null,
+  "originStation": "지축",
+  "terminusStation": "대화",
+  "totalDistanceKmOfficial": 19.2,
+  "region": ["수도권서부본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "지축", "cumulativeKm": 0.0, "stationType": null, "isKtxStop": false, "remarks": "서울 지하철 3호선과 직결" },
+    { "name": "삼송", "cumulativeKm": 1.7, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "원흥", "cumulativeKm": 3.8, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "원당", "cumulativeKm": 6.7, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "화정", "cumulativeKm": 9.3, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "대곡", "cumulativeKm": 11.4, "stationType": null, "isKtxStop": false, "remarks": "경의선/서해선과 접속" },
+    { "name": "백석", "cumulativeKm": 13.9, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "마두", "cumulativeKm": 15.3, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "정발산", "cumulativeKm": 16.2, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "주엽", "cumulativeKm": 17.8, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "대화", "cumulativeKm": 19.2, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치" }
+  ],
+  "verification": { "officialTotalKm": 19.2, "computedTotalKm": 19.2, "match": true },
+  "sourceNotes": "서울 지하철 3호선과 직결 운행."
+}

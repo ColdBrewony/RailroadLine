@@ -1,0 +1,16 @@
+{
+  "lineName": "군산항선",
+  "segmentLabel": null,
+  "originStation": "대야",
+  "terminusStation": "군산항",
+  "totalDistanceKmOfficial": 28.6,
+  "region": ["전북본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "대야", "cumulativeKm": 0.0, "stationType": null, "isKtxStop": false, "remarks": "장항선과 접속" },
+    { "name": "군산옥산", "cumulativeKm": 8.3, "stationType": "SIGNAL_STATION", "isKtxStop": false, "remarks": "옥구선 분기점" },
+    { "name": "군산항", "cumulativeKm": 25.8, "stationType": "FREIGHT", "isKtxStop": false, "remarks": "종점. 공식 영업거리(28.6)와 2.8km 차이 있음, 원인 미상" }
+  ],
+  "verification": { "officialTotalKm": 28.6, "computedTotalKm": 25.8, "match": false, "note": "위키백과 개요의 '영업거리 28.6km'와 정차역 표 마지막 값(25.8km)이 서로 다름 — 위키백과 자체 오차로 추정" },
+  "sourceNotes": "2020년 개통, 장항선 복선전철화 및 전라선 직결 물류수송망 목적."
+}

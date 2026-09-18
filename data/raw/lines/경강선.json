@@ -1,0 +1,25 @@
+﻿{
+  "lineName": "경강선",
+  "segmentLabel": "판교-여주",
+  "originStation": "판교",
+  "terminusStation": "여주",
+  "totalDistanceKmOfficial": 57.0,
+  "region": ["수도권서부본부", "수도권동부본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "판교", "cumulativeKm": 0.5, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "성남", "cumulativeKm": 1.2, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "이매", "cumulativeKm": 2.0, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "삼동", "cumulativeKm": 8.9, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "경기광주", "cumulativeKm": 13.8, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "초월", "cumulativeKm": 18.8, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "곤지암", "cumulativeKm": 23.7, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "신둔도예촌", "cumulativeKm": 30.5, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "이천", "cumulativeKm": 38.3, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "부발", "cumulativeKm": 42.8, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "세종대왕릉", "cumulativeKm": 51.1, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "여주", "cumulativeKm": 57.0, "stationType": null, "isKtxStop": false, "remarks": null }
+  ],
+  "verification": { "officialTotalKm": 57.0, "computedTotalKm": 57.0, "match": true },
+  "sourceNotes": null
+}

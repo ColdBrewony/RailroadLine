@@ -1,0 +1,16 @@
+{
+  "lineName": "광주선",
+  "segmentLabel": null,
+  "originStation": "광주송정",
+  "terminusStation": "광주",
+  "totalDistanceKmOfficial": 11.9,
+  "region": ["광주본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "광주송정", "cumulativeKm": 0.0, "stationType": "MANAGED", "isKtxStop": true, "remarks": "호남선/경전선과 접속. 정정: 이전 '동송정'은 오류로 수정" },
+    { "name": "극락강", "cumulativeKm": 4.5, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "광주", "cumulativeKm": 11.9, "stationType": null, "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치" }
+  ],
+  "verification": { "officialTotalKm": 11.9, "computedTotalKm": 11.9, "match": true },
+  "sourceNotes": "단선 전철, ITX-새마을·무궁화호 운행."
+}

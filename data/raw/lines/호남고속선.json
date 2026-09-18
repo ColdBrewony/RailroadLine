@@ -1,0 +1,18 @@
+{
+  "lineName": "호남고속선",
+  "segmentLabel": null,
+  "originStation": "오송",
+  "terminusStation": "광주송정",
+  "totalDistanceKmOfficial": 183.8,
+  "region": ["대전충남본부", "전북본부", "광주본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "오송", "cumulativeKm": 0.0, "stationType": "MANAGED", "isKtxStop": true, "remarks": "경부고속선/충북선과 접속" },
+    { "name": "공주", "cumulativeKm": 43.8, "stationType": "MANAGED", "isKtxStop": true, "remarks": null },
+    { "name": "익산", "cumulativeKm": 89.8, "stationType": "MANAGED", "isKtxStop": true, "remarks": "호남선/전라선/장항선과 접속" },
+    { "name": "정읍", "cumulativeKm": 131.9, "stationType": "MANAGED", "isKtxStop": true, "remarks": null },
+    { "name": "광주송정", "cumulativeKm": 182.4, "stationType": "MANAGED", "isKtxStop": true, "remarks": "종점, 호남선/경전선/광주선과 접속. 공식 총거리(183.8)와 1.4km 근소한 차이" }
+  ],
+  "verification": { "officialTotalKm": 183.8, "computedTotalKm": 182.4, "match": true, "note": "근사 일치(1.4km 차이)" },
+  "sourceNotes": "2015년 개통. 이전 버전은 판독 실패로 데이터가 전혀 없었으나 이번에 완전히 채움."
+}

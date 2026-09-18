@@ -1,0 +1,16 @@
+{
+  "lineName": "우암선",
+  "segmentLabel": null,
+  "originStation": "부산진",
+  "terminusStation": "신선대",
+  "totalDistanceKmOfficial": 6.1,
+  "region": ["부산경남본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "부산진", "cumulativeKm": 0.0, "stationType": "MANAGED", "isKtxStop": false, "remarks": "동해선과 접속" },
+    { "name": "우암", "cumulativeKm": 2.4, "stationType": "FREIGHT", "isKtxStop": false, "remarks": null },
+    { "name": "신선대", "cumulativeKm": 6.1, "stationType": "FREIGHT", "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치. 정정: 이전 '신전대'는 오독" }
+  ],
+  "verification": { "officialTotalKm": 6.1, "computedTotalKm": 6.1, "match": true },
+  "sourceNotes": "부산항 신선대부두 인입철도, 화물 전용, 여객 영업 없음. 화물 전용선 중 유일한 복선(비전철)."
+}

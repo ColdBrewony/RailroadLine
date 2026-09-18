@@ -1,0 +1,24 @@
+{
+  "lineName": "교외선",
+  "segmentLabel": null,
+  "originStation": "능곡",
+  "terminusStation": "의정부",
+  "totalDistanceKmOfficial": 31.8,
+  "region": ["수도권서부본부", "수도권동부본부"],
+  "source": "ko.wikipedia.org + map",
+  "stations": [
+    { "name": "능곡", "cumulativeKm": 0.0, "stationType": null, "isKtxStop": false, "remarks": "경의선/서해선과 접속" },
+    { "name": "대곡", "cumulativeKm": 1.5, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "대정", "cumulativeKm": 2.8, "stationType": null, "isKtxStop": false, "remarks": "지도에서 확인됨" },
+    { "name": "원릉", "cumulativeKm": 5.7, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "삼릉", "cumulativeKm": 7.8, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "벽제", "cumulativeKm": 12.0, "stationType": null, "isKtxStop": false, "remarks": "지도에서 확인됨" },
+    { "name": "일영", "cumulativeKm": 16.7, "stationType": null, "isKtxStop": false, "remarks": "지도에서 확인됨" },
+    { "name": "장흥", "cumulativeKm": 19.1, "stationType": null, "isKtxStop": false, "remarks": "지도에서 확인됨" },
+    { "name": "온릉", "cumulativeKm": 19.9, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "송추", "cumulativeKm": 23.1, "stationType": null, "isKtxStop": false, "remarks": "지도에서 확인됨" },
+    { "name": "의정부", "cumulativeKm": 31.8, "stationType": "MANAGED", "isKtxStop": false, "remarks": "종점, 경원선과 접속. 공식 총거리와 정확히 일치" }
+  ],
+  "verification": { "officialTotalKm": 31.8, "computedTotalKm": 31.8, "match": true },
+  "sourceNotes": "2025년 1월 11일 여객 운행 재개(일 왕복 8회), 4월부터 일 왕복 20회로 확대. 원본 지도에도 '교외선(능곡-의정부)' 박스와 실제 선로가 표기되어 있으나 초기 데이터 수집 단계에서 누락됐던 노선. 사용자 지적으로 추가."
+}

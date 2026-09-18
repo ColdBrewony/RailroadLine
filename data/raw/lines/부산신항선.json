@@ -1,0 +1,16 @@
+{
+  "lineName": "부산신항선",
+  "segmentLabel": null,
+  "originStation": "진례",
+  "terminusStation": "부산신항",
+  "totalDistanceKmOfficial": 21.3,
+  "region": ["부산경남본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "진례", "cumulativeKm": 0.0, "stationType": null, "isKtxStop": false, "remarks": "경전선과 접속" },
+    { "name": "장유", "cumulativeKm": 9.6, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "부산신항", "cumulativeKm": 21.3, "stationType": "FREIGHT", "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치. 신항북선/신항남선 접속" }
+  ],
+  "verification": { "officialTotalKm": 21.3, "computedTotalKm": 21.3, "match": true },
+  "sourceNotes": null
+}

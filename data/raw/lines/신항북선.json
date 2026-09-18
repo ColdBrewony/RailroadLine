@@ -1,0 +1,15 @@
+{
+  "lineName": "신항북선",
+  "segmentLabel": null,
+  "originStation": "부산신항",
+  "terminusStation": "북철송장",
+  "totalDistanceKmOfficial": 5.8,
+  "region": ["부산경남본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "부산신항", "cumulativeKm": 0.0, "stationType": null, "isKtxStop": false, "remarks": "부산신항선과 접속" },
+    { "name": "북철송장", "cumulativeKm": 5.8, "stationType": "FREIGHT", "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치. 정정: 이전 7.7에서 수정(신항남선과 값이 뒤바뀌어 있었음)" }
+  ],
+  "verification": { "officialTotalKm": 5.8, "computedTotalKm": 5.8, "match": true },
+  "sourceNotes": "화물 전용, 비전철 단선."
+}

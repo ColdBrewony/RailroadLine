@@ -1,0 +1,25 @@
+{
+  "lineName": "경북선",
+  "segmentLabel": null,
+  "originStation": "김천",
+  "terminusStation": "영주",
+  "totalDistanceKmOfficial": 115.0,
+  "region": ["경북본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "김천", "cumulativeKm": 0.0, "stationType": null, "isKtxStop": true, "remarks": "경부선 연결" },
+    { "name": "옥산", "cumulativeKm": 20.0, "stationType": "UNMANNED", "isKtxStop": false, "remarks": null },
+    { "name": "청리", "cumulativeKm": 27.1, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "상주", "cumulativeKm": 36.0, "stationType": "MANAGED", "isKtxStop": false, "remarks": null },
+    { "name": "백원", "cumulativeKm": 44.4, "stationType": "UNMANNED", "isKtxStop": false, "remarks": null },
+    { "name": "함창", "cumulativeKm": 55.8, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "점촌", "cumulativeKm": 60.0, "stationType": "MANAGED", "isKtxStop": false, "remarks": "문경선 연결" },
+    { "name": "용궁", "cumulativeKm": 66.9, "stationType": "UNMANNED", "isKtxStop": false, "remarks": null },
+    { "name": "개포", "cumulativeKm": 73.3, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "예천", "cumulativeKm": 85.0, "stationType": "STAFFED", "isKtxStop": false, "remarks": null },
+    { "name": "어등", "cumulativeKm": 101.4, "stationType": "UNMANNED", "isKtxStop": false, "remarks": null },
+    { "name": "영주", "cumulativeKm": 115.0, "stationType": "MANAGED", "isKtxStop": true, "remarks": "종점, 중앙선·영동선 연결" }
+  ],
+  "verification": { "officialTotalKm": 115.0, "computedTotalKm": 115.0, "match": true },
+  "sourceNotes": "현재 무궁화호 일일 5회 운행."
+}

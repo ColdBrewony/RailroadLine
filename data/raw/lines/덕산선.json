@@ -1,0 +1,16 @@
+{
+  "lineName": "덕산선",
+  "segmentLabel": null,
+  "originStation": "창원",
+  "terminusStation": "덕산",
+  "totalDistanceKmOfficial": 8.2,
+  "region": ["부산경남본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "창원", "cumulativeKm": 0.0, "stationType": "MANAGED", "isKtxStop": false, "remarks": "정정: 이전 버전 기점(용강)이 잘못됐음, 실제 기점은 창원" },
+    { "name": "용강", "cumulativeKm": 3.3, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "덕산", "cumulativeKm": 8.2, "stationType": "UNMANNED", "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치" }
+  ],
+  "verification": { "officialTotalKm": 8.2, "computedTotalKm": 8.2, "match": true },
+  "sourceNotes": "2010년 경전선 복선전철화로 창원~낙동강 구간이 이설되면서 옛 구간이 별도 지선으로 존치됨."
+}

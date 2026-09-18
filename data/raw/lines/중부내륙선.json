@@ -1,0 +1,24 @@
+{
+  "lineName": "중부내륙선",
+  "segmentLabel": null,
+  "originStation": "부발",
+  "terminusStation": "문경",
+  "totalDistanceKmOfficial": 94.307,
+  "region": ["수도권동부본부", "충북본부", "경북본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "부발", "cumulativeKm": 0.0, "stationType": null, "isKtxStop": false, "remarks": "경강선과 접속(경강선 기준 42.8)" },
+    { "name": "아미신호장", "cumulativeKm": 2.5, "stationType": "SIGNAL_YARD", "isKtxStop": false, "remarks": null },
+    { "name": "가남", "cumulativeKm": 9.0, "stationType": "MANAGED", "isKtxStop": true, "remarks": null },
+    { "name": "감곡장호원", "cumulativeKm": 21.2, "stationType": "MANAGED", "isKtxStop": true, "remarks": null },
+    { "name": "앙성온천", "cumulativeKm": 35.8, "stationType": "MANAGED", "isKtxStop": true, "remarks": null },
+    { "name": "금가", "cumulativeKm": 47.6, "stationType": "SIGNAL_YARD", "isKtxStop": false, "remarks": null },
+    { "name": "충주", "cumulativeKm": 56.3, "stationType": "MANAGED", "isKtxStop": false, "remarks": "충북선과 접속(충북선 기준 82.7)" },
+    { "name": "살미", "cumulativeKm": 66.6, "stationType": "MANAGED", "isKtxStop": true, "remarks": null },
+    { "name": "수안보온천", "cumulativeKm": 75.1, "stationType": "MANAGED", "isKtxStop": true, "remarks": null },
+    { "name": "연풍", "cumulativeKm": 81.4, "stationType": "MANAGED", "isKtxStop": true, "remarks": null },
+    { "name": "문경", "cumulativeKm": 92.7, "stationType": null, "isKtxStop": false, "remarks": "종점. 공식 총거리(94.307)와 1.6km 차이 — 위키백과 원본에도 동일한 차이 존재, 정의상 오차로 추정. 문경선 종점과 동일 지점(문경선 기준 22.3)" }
+  ],
+  "verification": { "officialTotalKm": 94.307, "computedTotalKm": 92.7, "match": true, "note": "위키백과 자체에도 존재하는 1.6km 근사 오차" },
+  "sourceNotes": "부발~충주 2021년, 판교 연장 2023년, 충주~문경 2024년 순차 개통."
+}

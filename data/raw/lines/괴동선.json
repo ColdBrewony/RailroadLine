@@ -1,0 +1,16 @@
+{
+  "lineName": "괴동선",
+  "segmentLabel": null,
+  "originStation": "부조",
+  "terminusStation": "괴동",
+  "totalDistanceKmOfficial": 10.9,
+  "region": ["대구본부"],
+  "source": "ko.wikipedia.org + map",
+  "stations": [
+    { "name": "부조", "cumulativeKm": 0.0, "stationType": null, "isKtxStop": false, "remarks": "동해선과 접속(동해선 기준 139.5)" },
+    { "name": "효자", "cumulativeKm": 5.3, "stationType": null, "isKtxStop": false, "remarks": "지도에서는 5.6으로 보였으나 위키백과 기준 5.3 채택" },
+    { "name": "괴동", "cumulativeKm": 10.9, "stationType": "FREIGHT", "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치" }
+  ],
+  "verification": { "officialTotalKm": 10.9, "computedTotalKm": 10.9, "match": true },
+  "sourceNotes": "화물 전용 단선. 1971년 개통. 원본 지도에서 확인, 초기 데이터 수집 단계에서 누락됐던 노선(사용자 지적으로 추가)."
+}

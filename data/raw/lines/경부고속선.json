@@ -1,0 +1,23 @@
+﻿{
+  "lineName": "경부고속선",
+  "segmentLabel": null,
+  "originStation": "시흥연결선",
+  "terminusStation": "부산",
+  "totalDistanceKmOfficial": 398.2,
+  "region": ["서울본부", "대전충남본부", "대구본부", "부산경남본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "광명", "cumulativeKm": 2.8, "stationType": "MANAGED", "isKtxStop": true, "remarks": null },
+    { "name": "천안아산", "cumulativeKm": 76.8, "stationType": "MANAGED", "isKtxStop": true, "remarks": null },
+    { "name": "오송", "cumulativeKm": 105.5, "stationType": "MANAGED", "isKtxStop": true, "remarks": null },
+    { "name": "대전", "cumulativeKm": 140.6, "stationType": "MANAGED", "isKtxStop": true, "remarks": null },
+    { "name": "김천(구미)", "cumulativeKm": 214.4, "stationType": "MANAGED", "isKtxStop": true, "remarks": "정정: 이전 지도 판독값(233.6)에서 위키백과 기준으로 수정" },
+    { "name": "서대구", "cumulativeKm": 261.7, "stationType": "MANAGED", "isKtxStop": true, "remarks": "정정: 이전 279.3에서 수정" },
+    { "name": "동대구", "cumulativeKm": 269.1, "stationType": "MANAGED", "isKtxStop": true, "remarks": "정정: 이전 286.7에서 수정" },
+    { "name": "경주", "cumulativeKm": 316.5, "stationType": "MANAGED", "isKtxStop": true, "remarks": null },
+    { "name": "울산", "cumulativeKm": 346.5, "stationType": "MANAGED", "isKtxStop": true, "remarks": null },
+    { "name": "부산", "cumulativeKm": 398.2, "stationType": "MANAGED", "isKtxStop": true, "remarks": "종점, 공식 총거리와 정확히 일치" }
+  ],
+  "verification": { "officialTotalKm": 398.2, "computedTotalKm": 398.2, "match": true },
+  "sourceNotes": "이전 버전(지도 판독)에서는 경산(299.0), 밀양(342.0)을 경부고속선 정차역으로 오인했으나, 위키백과 기준 이 두 역은 경부고속선 정차역이 아니어서 제외함."
+}

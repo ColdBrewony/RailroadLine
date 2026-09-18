@@ -1,0 +1,15 @@
+{
+  "lineName": "북평선",
+  "segmentLabel": null,
+  "originStation": "동해",
+  "terminusStation": "삼화",
+  "totalDistanceKmOfficial": 6.4,
+  "region": ["강원본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "동해", "cumulativeKm": 0.0, "stationType": "MANAGED", "isKtxStop": true, "remarks": "영동선/삼척선/묵호항선과 접속" },
+    { "name": "삼화", "cumulativeKm": 6.4, "stationType": "FREIGHT", "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치" }
+  ],
+  "verification": { "officialTotalKm": 6.4, "computedTotalKm": 6.4, "match": true },
+  "sourceNotes": "양회(시멘트) 화물 수송용, 1974년 이후 여객열차 미운행."
+}

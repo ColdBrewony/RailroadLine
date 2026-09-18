@@ -1,0 +1,17 @@
+{
+  "lineName": "광양제철선",
+  "segmentLabel": null,
+  "originStation": "광양",
+  "terminusStation": "태금",
+  "totalDistanceKmOfficial": 18.6,
+  "region": ["전남본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "광양", "cumulativeKm": 0.0, "stationType": null, "isKtxStop": false, "remarks": "경전선과 접속" },
+    { "name": "초남", "cumulativeKm": 6.0, "stationType": "SIGNAL_YARD", "isKtxStop": false, "remarks": "신광양항선 분기점" },
+    { "name": "황길", "cumulativeKm": 12.5, "stationType": "SIGNAL_YARD", "isKtxStop": false, "remarks": "광양항선 분기점" },
+    { "name": "태금", "cumulativeKm": 18.6, "stationType": "FREIGHT", "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치" }
+  ],
+  "verification": { "officialTotalKm": 18.6, "computedTotalKm": 18.6, "match": true },
+  "sourceNotes": "화물 전용 단선, 비전철. 포스코 광양제철소 공장전용선 및 광양항 컨테이너 수송 기능."
+}

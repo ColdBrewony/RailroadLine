@@ -1,0 +1,15 @@
+{
+  "lineName": "부전선",
+  "segmentLabel": null,
+  "originStation": "가야",
+  "terminusStation": "부전",
+  "totalDistanceKmOfficial": 2.2,
+  "region": ["부산경남본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "가야", "cumulativeKm": 0.0, "stationType": null, "isKtxStop": false, "remarks": "가야선 및 부산 도시철도 2호선 접속" },
+    { "name": "부전", "cumulativeKm": 2.2, "stationType": "MANAGED", "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치. 동해선 및 부산 도시철도 1호선 접속. 정정: 이전 4.6에서 수정" }
+  ],
+  "verification": { "officialTotalKm": 2.2, "computedTotalKm": 2.2, "match": true },
+  "sourceNotes": "2003년 복선화, 2008년 전철화."
+}

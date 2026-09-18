@@ -1,0 +1,15 @@
+{
+  "lineName": "영일만항선",
+  "segmentLabel": null,
+  "originStation": "포항",
+  "terminusStation": "영일만항",
+  "totalDistanceKmOfficial": 11.2,
+  "region": ["대구본부"],
+  "source": "ko.wikipedia.org + map",
+  "stations": [
+    { "name": "포항", "cumulativeKm": 0.0, "stationType": "MANAGED", "isKtxStop": true, "remarks": "동해선과 접속(동해선 기준 149.7)" },
+    { "name": "영일만항", "cumulativeKm": 11.2, "stationType": "FREIGHT", "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치" }
+  ],
+  "verification": { "officialTotalKm": 11.2, "computedTotalKm": 11.2, "match": true },
+  "sourceNotes": "화물 전용, 비전철 단선. 2019년 개통. 원본 지도에서 확인, 초기 데이터 수집 단계에서 누락됐던 노선(사용자 지적으로 추가)."
+}

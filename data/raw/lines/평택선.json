@@ -1,0 +1,17 @@
+{
+  "lineName": "평택선",
+  "segmentLabel": null,
+  "originStation": "안중",
+  "terminusStation": "평택",
+  "totalDistanceKmOfficial": 17.3,
+  "region": ["대전충남본부", "수도권서부본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "안중", "cumulativeKm": 0.0, "stationType": "MANAGED", "isKtxStop": false, "remarks": "서해선과 접속" },
+    { "name": "창내", "cumulativeKm": 8.5, "stationType": null, "isKtxStop": false, "remarks": "정정: 이전 버전에서 신대와 순서가 뒤바뀌어 있었음" },
+    { "name": "신대신호소", "cumulativeKm": 14.04, "stationType": "SIGNAL_STATION", "isKtxStop": false, "remarks": "정정: 이전 '신대'(2.2)에서 순서·거리 모두 수정" },
+    { "name": "평택", "cumulativeKm": 17.3, "stationType": null, "isKtxStop": false, "remarks": "종점, 경부선과 접속. 공식 총거리와 정확히 일치" }
+  ],
+  "verification": { "officialTotalKm": 17.3, "computedTotalKm": 17.3, "match": true },
+  "sourceNotes": "2015년 창내~평택(8.8km) 개통 후 2024년 11월 안중~창내 구간이 연장되어 현재 총 17.3km. 포승역은 2030년 개통 예정(미개통)."
+}

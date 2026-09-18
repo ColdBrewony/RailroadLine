@@ -1,0 +1,16 @@
+{
+  "lineName": "울산항선",
+  "segmentLabel": null,
+  "originStation": "태화강",
+  "terminusStation": "울산항",
+  "totalDistanceKmOfficial": 4.6,
+  "region": ["부산경남본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "태화강", "cumulativeKm": 0.0, "stationType": "MANAGED", "isKtxStop": true, "remarks": "동해선과 접속" },
+    { "name": "야음", "cumulativeKm": null, "stationType": null, "isKtxStop": false, "remarks": "폐역" },
+    { "name": "울산항", "cumulativeKm": 4.6, "stationType": "UNMANNED", "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치" }
+  ],
+  "verification": { "officialTotalKm": 4.6, "computedTotalKm": 4.6, "match": true },
+  "sourceNotes": "2023년 11월 시험선으로 운행 재개."
+}

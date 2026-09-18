@@ -1,0 +1,32 @@
+{
+  "lineName": "태백선",
+  "segmentLabel": null,
+  "originStation": "제천",
+  "terminusStation": "백산",
+  "totalDistanceKmOfficial": 104.1,
+  "region": ["충북본부", "강원본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "제천", "cumulativeKm": 0.0, "stationType": "MANAGED", "isKtxStop": true, "remarks": "중앙선과 접속" },
+    { "name": "입석리", "cumulativeKm": 13.7, "stationType": null, "isKtxStop": false, "remarks": "정정: 이전 18.3에서 수정" },
+    { "name": "쌍룡", "cumulativeKm": 18.3, "stationType": "STAFFED", "isKtxStop": true, "remarks": "정정: 이전 25.9에서 수정" },
+    { "name": "연당", "cumulativeKm": 25.9, "stationType": "UNMANNED", "isKtxStop": false, "remarks": "정정: 이전 31.6에서 수정" },
+    { "name": "청령포", "cumulativeKm": 31.6, "stationType": "STAFFED", "isKtxStop": false, "remarks": "정정: 이전 34.7에서 수정" },
+    { "name": "영월", "cumulativeKm": 34.7, "stationType": "STAFFED", "isKtxStop": true, "remarks": "정정: 이전 37.4에서 수정" },
+    { "name": "탄부", "cumulativeKm": 37.4, "stationType": null, "isKtxStop": false, "remarks": "신규 확인(이전 버전에 없었음)" },
+    { "name": "연하", "cumulativeKm": 42.3, "stationType": "SIGNAL_YARD", "isKtxStop": false, "remarks": null },
+    { "name": "석항", "cumulativeKm": 49.0, "stationType": "STAFFED", "isKtxStop": false, "remarks": null },
+    { "name": "예미", "cumulativeKm": 52.1, "stationType": "FREIGHT", "isKtxStop": true, "remarks": "함백선(예미-조동) 분기점" },
+    { "name": "조동", "cumulativeKm": 58.7, "stationType": null, "isKtxStop": false, "remarks": "신규 확인. 함백선 종점과 동일 지점으로 추정" },
+    { "name": "자미원", "cumulativeKm": 63.1, "stationType": null, "isKtxStop": false, "remarks": "신규 확인" },
+    { "name": "민둥산", "cumulativeKm": 69.8, "stationType": "MANAGED", "isKtxStop": true, "remarks": "정선선 분기점" },
+    { "name": "사북", "cumulativeKm": 75.8, "stationType": "STAFFED", "isKtxStop": true, "remarks": null },
+    { "name": "고한", "cumulativeKm": 80.4, "stationType": "TEMPORARY_PLATFORM", "isKtxStop": true, "remarks": null },
+    { "name": "추전", "cumulativeKm": 89.4, "stationType": "UNMANNED", "isKtxStop": false, "remarks": null },
+    { "name": "태백", "cumulativeKm": 95.4, "stationType": "MANAGED", "isKtxStop": true, "remarks": null },
+    { "name": "문곡", "cumulativeKm": 98.4, "stationType": "UNMANNED", "isKtxStop": false, "remarks": null },
+    { "name": "백산", "cumulativeKm": 104.1, "stationType": "UNMANNED", "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치. 영동선과 접속(영동선 기준 91.3)" }
+  ],
+  "verification": { "officialTotalKm": 104.1, "computedTotalKm": 104.1, "match": true },
+  "sourceNotes": "여객취급역: 제천·쌍룡·영월·예미·민둥산·사북·고한·태백. 제천~입석리 복선, 이후 단선. 이전 지도 판독 버전은 역명이 한 칸씩 밀려 배정된 오류가 있었음, 전면 정정."
+}

@@ -1,0 +1,15 @@
+{
+  "lineName": "부강화물선",
+  "segmentLabel": null,
+  "originStation": "부강",
+  "terminusStation": "부강화물",
+  "totalDistanceKmOfficial": 2.9,
+  "region": ["대전충남본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "부강", "cumulativeKm": 0.0, "stationType": null, "isKtxStop": false, "remarks": "경부선과 접속" },
+    { "name": "부강화물", "cumulativeKm": 2.9, "stationType": "FREIGHT", "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치" }
+  ],
+  "verification": { "officialTotalKm": 2.9, "computedTotalKm": 2.9, "match": true },
+  "sourceNotes": "화물 전용, 경부선과 평면교차 방지 위해 전 구간 복선 설계."
+}

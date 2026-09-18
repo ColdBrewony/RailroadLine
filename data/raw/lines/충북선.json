@@ -1,0 +1,32 @@
+{
+  "lineName": "충북선",
+  "segmentLabel": null,
+  "originStation": "조치원",
+  "terminusStation": "봉양",
+  "totalDistanceKmOfficial": 115.0,
+  "region": ["대전충남본부", "충북본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "조치원", "cumulativeKm": 0.0, "stationType": "MANAGED", "isKtxStop": false, "remarks": "경부선과 접속" },
+    { "name": "오송", "cumulativeKm": 4.4, "stationType": "MANAGED", "isKtxStop": true, "remarks": "경부고속선/호남고속선과 접속. 신규 확인" },
+    { "name": "청주", "cumulativeKm": 11.4, "stationType": "FREIGHT", "isKtxStop": false, "remarks": null },
+    { "name": "오근장", "cumulativeKm": 21.5, "stationType": "STAFFED", "isKtxStop": false, "remarks": null },
+    { "name": "청주공항", "cumulativeKm": 24.4, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "내수", "cumulativeKm": 28.8, "stationType": "UNMANNED", "isKtxStop": false, "remarks": null },
+    { "name": "증평", "cumulativeKm": 36.6, "stationType": "STAFFED", "isKtxStop": false, "remarks": null },
+    { "name": "도안", "cumulativeKm": 42.8, "stationType": "FREIGHT", "isKtxStop": false, "remarks": null },
+    { "name": "보천", "cumulativeKm": 51.5, "stationType": "STAFFED", "isKtxStop": false, "remarks": null },
+    { "name": "음성", "cumulativeKm": 59.6, "stationType": "FREIGHT", "isKtxStop": false, "remarks": null },
+    { "name": "소이", "cumulativeKm": 64.1, "stationType": "UNMANNED", "isKtxStop": false, "remarks": null },
+    { "name": "주덕", "cumulativeKm": 71.9, "stationType": null, "isKtxStop": false, "remarks": "신규 확인" },
+    { "name": "달천", "cumulativeKm": 78.9, "stationType": "UNMANNED", "isKtxStop": false, "remarks": null },
+    { "name": "충주", "cumulativeKm": 82.7, "stationType": "MANAGED", "isKtxStop": false, "remarks": "중부내륙선과 접속(중부내륙선 기준 56.3)" },
+    { "name": "목행", "cumulativeKm": 88.1, "stationType": "UNMANNED", "isKtxStop": false, "remarks": null },
+    { "name": "동량", "cumulativeKm": 92.7, "stationType": "UNMANNED", "isKtxStop": false, "remarks": null },
+    { "name": "삼탄", "cumulativeKm": 100.6, "stationType": "STAFFED", "isKtxStop": false, "remarks": null },
+    { "name": "공전", "cumulativeKm": 106.4, "stationType": "UNMANNED", "isKtxStop": false, "remarks": null },
+    { "name": "봉양", "cumulativeKm": 115.0, "stationType": "STAFFED", "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치. 중앙선과 접속(중앙선 기준 125.2)" }
+  ],
+  "verification": { "officialTotalKm": 115.0, "computedTotalKm": 115.0, "match": true },
+  "sourceNotes": "오송~조치원 단선, 봉양~오송 복선."
+}

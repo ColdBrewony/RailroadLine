@@ -1,0 +1,30 @@
+{
+  "lineName": "서해선",
+  "segmentLabel": "대곡-원시",
+  "originStation": "대곡",
+  "terminusStation": "원시",
+  "totalDistanceKmOfficial": 40.3,
+  "region": ["수도권서부본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "대곡", "cumulativeKm": 0.7, "stationType": null, "isKtxStop": false, "remarks": "경의선과 접속" },
+    { "name": "능곡", "cumulativeKm": 2.5, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "김포공항", "cumulativeKm": 9.9, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "원종", "cumulativeKm": 14.2, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "부천종합운동장", "cumulativeKm": 16.3, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "소사", "cumulativeKm": 19.0, "stationType": null, "isKtxStop": false, "remarks": "경인선과 접속" },
+    { "name": "소새울", "cumulativeKm": 20.7, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "시흥대야", "cumulativeKm": 22.8, "stationType": null, "isKtxStop": false, "remarks": "정정: 이전 '소새울'로 착각했던 역, 실제로는 별도 역" },
+    { "name": "신천", "cumulativeKm": 24.2, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "신현", "cumulativeKm": 27.5, "stationType": null, "isKtxStop": false, "remarks": "신규 확인" },
+    { "name": "시흥시청", "cumulativeKm": 31.1, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "시흥능곡", "cumulativeKm": 32.4, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "달미", "cumulativeKm": 34.8, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "선부", "cumulativeKm": 36.4, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "초지", "cumulativeKm": 38.1, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": "안산선/수인선과 접속" },
+    { "name": "시우", "cumulativeKm": 39.5, "stationType": null, "isKtxStop": false, "remarks": "신규 확인" },
+    { "name": "원시", "cumulativeKm": 41.0, "stationType": null, "isKtxStop": false, "remarks": "종점. 공식 총거리(40.3)와 0.7km 근소한 차이(대곡 기점이 0.7이라 발생하는 차이로 추정)" }
+  ],
+  "verification": { "officialTotalKm": 40.3, "computedTotalKm": 40.3, "match": true, "note": "원시(41.0) - 대곡(0.7) = 40.3, 공식 총거리와 정확히 일치" },
+  "sourceNotes": "소사~원시 2018년, 대곡~소사 2023년 개통. 이전 버전 대비 시흥대야/신현/시우 등 다수 역 추가 및 순서 정정."
+}

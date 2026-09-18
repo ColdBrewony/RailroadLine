@@ -1,0 +1,15 @@
+{
+  "lineName": "온산선",
+  "segmentLabel": null,
+  "originStation": "남창",
+  "terminusStation": "온산",
+  "totalDistanceKmOfficial": 8.6,
+  "region": ["부산경남본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "남창", "cumulativeKm": 0.0, "stationType": null, "isKtxStop": false, "remarks": "동해선과 접속" },
+    { "name": "온산", "cumulativeKm": 8.6, "stationType": "FREIGHT", "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치. 정정: 이전 버전의 중간역 '용암(4.3)'은 위키백과 표에 없어 제외" }
+  ],
+  "verification": { "officialTotalKm": 8.6, "computedTotalKm": 8.6, "match": true },
+  "sourceNotes": "온산산업단지 화물 처리용. 영풍·에쓰오일이 황산·유류 운송으로 일 2회 이용."
+}

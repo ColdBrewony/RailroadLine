@@ -1,0 +1,22 @@
+{
+  "lineName": "정선선",
+  "segmentLabel": null,
+  "originStation": "민둥산",
+  "terminusStation": "구절리",
+  "totalDistanceKmOfficial": 45.9,
+  "region": ["강원본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "민둥산", "cumulativeKm": 0.0, "stationType": "MANAGED", "isKtxStop": false, "remarks": "태백선과 접속(태백선 기준 69.8)" },
+    { "name": "별어곡", "cumulativeKm": 6.4, "stationType": "UNMANNED", "isKtxStop": false, "remarks": null },
+    { "name": "선평", "cumulativeKm": 13.7, "stationType": "UNMANNED", "isKtxStop": false, "remarks": null },
+    { "name": "신치", "cumulativeKm": null, "stationType": null, "isKtxStop": false, "remarks": "폐역" },
+    { "name": "정선", "cumulativeKm": 22.6, "stationType": "STAFFED", "isKtxStop": false, "remarks": null },
+    { "name": "송석", "cumulativeKm": null, "stationType": null, "isKtxStop": false, "remarks": "폐역" },
+    { "name": "나전", "cumulativeKm": 32.6, "stationType": "UNMANNED", "isKtxStop": false, "remarks": null },
+    { "name": "아우라지", "cumulativeKm": 38.7, "stationType": "TEMPORARY_PLATFORM", "isKtxStop": false, "remarks": null },
+    { "name": "구절리", "cumulativeKm": 45.9, "stationType": null, "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치. 정기 열차 운행 중단, 레일바이크·관광열차만 운행" }
+  ],
+  "verification": { "officialTotalKm": 45.9, "computedTotalKm": 45.9, "match": true },
+  "sourceNotes": "정기 여객역: 민둥산·별어곡·선평·정선·나전·아우라지. 신치·송석은 폐역, 구절리는 열차 미운행(레일바이크 관광용)."
+}

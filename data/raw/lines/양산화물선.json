@@ -1,0 +1,15 @@
+{
+  "lineName": "양산화물선",
+  "segmentLabel": null,
+  "originStation": "물금",
+  "terminusStation": "양산화물",
+  "totalDistanceKmOfficial": 3.5,
+  "region": ["부산경남본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "물금", "cumulativeKm": 0.0, "stationType": "MANAGED", "isKtxStop": true, "remarks": "경부선과 접속" },
+    { "name": "양산화물", "cumulativeKm": 3.5, "stationType": "FREIGHT", "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치" }
+  ],
+  "verification": { "officialTotalKm": 3.5, "computedTotalKm": 3.5, "match": true },
+  "sourceNotes": "경부선 화물 지선."
+}

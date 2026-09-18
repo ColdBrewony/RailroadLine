@@ -1,0 +1,24 @@
+{
+  "lineName": "과천선",
+  "segmentLabel": null,
+  "originStation": "금정",
+  "terminusStation": "남태령",
+  "totalDistanceKmOfficial": 14.4,
+  "region": ["수도권서부본부", "서울본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "금정", "cumulativeKm": 0.0, "stationType": null, "isKtxStop": false, "remarks": "경부선과 접속" },
+    { "name": "범계", "cumulativeKm": 2.6, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "평촌", "cumulativeKm": 3.9, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "인덕원", "cumulativeKm": 5.5, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "과천정보타운", "cumulativeKm": 6.6, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "정부과천청사", "cumulativeKm": 8.5, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "과천", "cumulativeKm": 9.5, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "대공원", "cumulativeKm": 10.5, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "경마공원", "cumulativeKm": 11.4, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "선바위", "cumulativeKm": 12.4, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "남태령", "cumulativeKm": 14.4, "stationType": null, "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치" }
+  ],
+  "verification": { "officialTotalKm": 14.4, "computedTotalKm": 14.4, "match": true },
+  "sourceNotes": null
+}

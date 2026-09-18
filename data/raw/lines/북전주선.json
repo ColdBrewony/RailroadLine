@@ -1,0 +1,15 @@
+{
+  "lineName": "북전주선",
+  "segmentLabel": null,
+  "originStation": "동산",
+  "terminusStation": "북전주",
+  "totalDistanceKmOfficial": 1.7,
+  "region": ["전북본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "동산", "cumulativeKm": 0.0, "stationType": null, "isKtxStop": false, "remarks": "전라선과 접속. 정정: 이전 기점(전주)이 잘못됐음, 실제 기점은 동산" },
+    { "name": "북전주", "cumulativeKm": 1.7, "stationType": "FREIGHT", "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치" }
+  ],
+  "verification": { "officialTotalKm": 1.7, "computedTotalKm": 1.7, "match": true },
+  "sourceNotes": "전주산업단지 화물 출입용 화물 전용, 비전철 단선."
+}

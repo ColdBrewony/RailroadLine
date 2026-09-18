@@ -1,0 +1,15 @@
+{
+  "lineName": "신동화물선",
+  "segmentLabel": null,
+  "originStation": "지천",
+  "terminusStation": "신동화물",
+  "totalDistanceKmOfficial": 11.5,
+  "region": ["대구본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "지천", "cumulativeKm": 0.0, "stationType": null, "isKtxStop": false, "remarks": "경부선과 접속. 정정: 이전 버전 기점(신동)이 잘못됐음, 실제 기점은 지천" },
+    { "name": "신동화물", "cumulativeKm": 11.5, "stationType": "FREIGHT", "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치. 정정: 이전 4.7에서 수정" }
+  ],
+  "verification": { "officialTotalKm": 11.5, "computedTotalKm": 11.5, "match": true },
+  "sourceNotes": "화물 전용 단선."
+}

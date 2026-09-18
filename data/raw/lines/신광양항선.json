@@ -1,0 +1,15 @@
+{
+  "lineName": "신광양항선",
+  "segmentLabel": null,
+  "originStation": "초남",
+  "terminusStation": "신광양항",
+  "totalDistanceKmOfficial": 6.2,
+  "region": ["전남본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "초남", "cumulativeKm": 0.0, "stationType": "SIGNAL_YARD", "isKtxStop": false, "remarks": "광양제철선과 접속" },
+    { "name": "신광양항", "cumulativeKm": 6.2, "stationType": "FREIGHT", "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치" }
+  ],
+  "verification": { "officialTotalKm": 6.2, "computedTotalKm": 6.2, "match": true },
+  "sourceNotes": "광양항선의 수송량 분담 목적으로 건설된 화물 전용선."
+}

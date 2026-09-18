@@ -1,0 +1,17 @@
+{
+  "lineName": "삼척선",
+  "segmentLabel": null,
+  "originStation": "동해",
+  "terminusStation": "삼척",
+  "totalDistanceKmOfficial": 12.9,
+  "region": ["강원본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "동해", "cumulativeKm": 0.0, "stationType": "MANAGED", "isKtxStop": true, "remarks": "영동선/북평선/묵호항선과 접속" },
+    { "name": "추암", "cumulativeKm": 6.4, "stationType": "UNMANNED", "isKtxStop": false, "remarks": null },
+    { "name": "삼척해변", "cumulativeKm": 7.8, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "삼척", "cumulativeKm": 12.9, "stationType": "MANAGED", "isKtxStop": true, "remarks": "종점, 공식 총거리와 정확히 일치. 동해선과 접속" }
+  ],
+  "verification": { "officialTotalKm": 12.9, "computedTotalKm": 12.9, "match": true },
+  "sourceNotes": null
+}

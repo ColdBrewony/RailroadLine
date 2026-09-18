@@ -1,0 +1,16 @@
+{
+  "lineName": "함백선",
+  "segmentLabel": null,
+  "originStation": "예미",
+  "terminusStation": "조동",
+  "totalDistanceKmOfficial": 9.6,
+  "region": ["강원본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "예미", "cumulativeKm": 0.0, "stationType": "FREIGHT", "isKtxStop": true, "remarks": "태백선과 접속(태백선 기준 52.1)" },
+    { "name": "함백", "cumulativeKm": 5.2, "stationType": "FREIGHT", "isKtxStop": false, "remarks": "정정: 이전 버전에서 이 역을 종점으로 오인, 실제로는 중간역" },
+    { "name": "조동", "cumulativeKm": 9.6, "stationType": null, "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치. 태백선상의 조동(58.7)과 동일 지점으로 추정" }
+  ],
+  "verification": { "officialTotalKm": 9.6, "computedTotalKm": 9.6, "match": true },
+  "sourceNotes": "태백선의 지선, 단선이지만 태백선과 함께 복선 기능 수행."
+}

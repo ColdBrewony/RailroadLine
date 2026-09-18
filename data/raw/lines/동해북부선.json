@@ -1,0 +1,16 @@
+{
+  "lineName": "동해북부선",
+  "segmentLabel": null,
+  "originStation": "제진",
+  "terminusStation": "감호",
+  "totalDistanceKmOfficial": 11.1,
+  "region": ["강원본부"],
+  "source": "ko.wikipedia.org",
+  "status": "UNBUILT",
+  "stations": [
+    { "name": "제진", "cumulativeKm": 0.0, "stationType": "UNMANNED", "isKtxStop": false, "remarks": "남측 최북단 접경역" },
+    { "name": "감호", "cumulativeKm": 11.1, "stationType": "UNMANNED", "isKtxStop": false, "remarks": "북측역사, 남북경계 이북" }
+  ],
+  "verification": { "officialTotalKm": 11.1, "computedTotalKm": 11.1, "match": true },
+  "sourceNotes": "현재 준공 후 미개통 상태(2022년 강릉~제진 구간 착공, 2027년 12월 준공 예정). 제진~감호 구간은 남북 분단으로 실질 운행 불가."
+}

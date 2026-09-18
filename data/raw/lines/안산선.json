@@ -1,0 +1,27 @@
+{
+  "lineName": "안산선",
+  "segmentLabel": null,
+  "originStation": "금정",
+  "terminusStation": "오이도",
+  "totalDistanceKmOfficial": 26.0,
+  "region": ["수도권서부본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "금정", "cumulativeKm": 0.0, "stationType": null, "isKtxStop": false, "remarks": "경부선/과천선과 접속" },
+    { "name": "산본", "cumulativeKm": 2.3, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "수리산", "cumulativeKm": 3.4, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "대야미", "cumulativeKm": 6.0, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "반월", "cumulativeKm": 8.0, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "상록수", "cumulativeKm": 11.7, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "한대앞", "cumulativeKm": 13.2, "stationType": null, "isKtxStop": false, "remarks": "수인선과 접속" },
+    { "name": "중앙", "cumulativeKm": 14.8, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "고잔", "cumulativeKm": 16.2, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "초지", "cumulativeKm": 17.7, "stationType": null, "isKtxStop": false, "remarks": "서해선/수인선과 접속" },
+    { "name": "안산", "cumulativeKm": 19.5, "stationType": "MANAGED", "isKtxStop": false, "remarks": null },
+    { "name": "신길온천", "cumulativeKm": 21.7, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "정왕", "cumulativeKm": 24.6, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "오이도", "cumulativeKm": 26.0, "stationType": null, "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치. 수인선과 접속" }
+  ],
+  "verification": { "officialTotalKm": 26.0, "computedTotalKm": 26.0, "match": true },
+  "sourceNotes": "한대앞~오이도 구간은 수인선과 선로를 공유(같은 역이 두 파일에 각자의 노선 기준으로 존재)."
+}

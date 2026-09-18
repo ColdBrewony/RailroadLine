@@ -1,0 +1,21 @@
+{
+  "lineName": "진해선",
+  "segmentLabel": null,
+  "originStation": "창원",
+  "terminusStation": "통해",
+  "totalDistanceKmOfficial": 21.2,
+  "region": ["부산경남본부"],
+  "source": "ko.wikipedia.org",
+  "status": "SUSPENDED",
+  "stations": [
+    { "name": "창원", "cumulativeKm": 0.0, "stationType": null, "isKtxStop": false, "remarks": "경전선과 접속" },
+    { "name": "신창원", "cumulativeKm": 4.8, "stationType": null, "isKtxStop": false, "remarks": "구 용원역. 신규 확인" },
+    { "name": "남창원", "cumulativeKm": 9.2, "stationType": "STAFFED", "isKtxStop": false, "remarks": "구 상남역" },
+    { "name": "성주사", "cumulativeKm": 12.8, "stationType": "STAFFED", "isKtxStop": false, "remarks": null },
+    { "name": "경화", "cumulativeKm": 16.9, "stationType": "STAFFED", "isKtxStop": false, "remarks": "정정: 이전 '경화역'은 오독, 역명은 '경화'" },
+    { "name": "진해", "cumulativeKm": 19.5, "stationType": null, "isKtxStop": false, "remarks": "신규 확인" },
+    { "name": "통해", "cumulativeKm": 21.2, "stationType": null, "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치. 일반인 이용 불가" }
+  ],
+  "verification": { "officialTotalKm": 21.2, "computedTotalKm": 21.2, "match": true },
+  "sourceNotes": "2015년 2월 1일부로 정기 여객열차 운행 중단, 현재 여객 영업 없음."
+}

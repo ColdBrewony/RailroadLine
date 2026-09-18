@@ -1,0 +1,16 @@
+{
+  "lineName": "울산신항선",
+  "segmentLabel": null,
+  "originStation": "망양",
+  "terminusStation": "울산신항",
+  "totalDistanceKmOfficial": 9.8,
+  "region": ["부산경남본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "망양", "cumulativeKm": 0.0, "stationType": "STAFFED", "isKtxStop": false, "remarks": "동해선과 접속. 정정: 이전 버전 기점('동해선분기')이 부정확했음, 실제 기점은 망양" },
+    { "name": "용암", "cumulativeKm": 4.3, "stationType": "UNMANNED", "isKtxStop": false, "remarks": null },
+    { "name": "울산신항", "cumulativeKm": 9.8, "stationType": "FREIGHT", "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치" }
+  ],
+  "verification": { "officialTotalKm": 9.8, "computedTotalKm": 9.8, "match": true },
+  "sourceNotes": "2020년 개통."
+}

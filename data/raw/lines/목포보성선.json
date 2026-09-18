@@ -1,0 +1,20 @@
+{
+  "lineName": "목포보성선",
+  "segmentLabel": null,
+  "originStation": "신보성",
+  "terminusStation": "임성리",
+  "totalDistanceKmOfficial": 79.2,
+  "region": ["광주본부", "전남본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "신보성", "cumulativeKm": 0.0, "stationType": null, "isKtxStop": false, "remarks": "경전선 보성역 인근 분기점, 보성연결선과도 접속" },
+    { "name": "장동", "cumulativeKm": 8.5, "stationType": "UNMANNED", "isKtxStop": false, "remarks": "정정: 이전 11.2에서 수정" },
+    { "name": "전남장흥", "cumulativeKm": 20.9, "stationType": "UNMANNED", "isKtxStop": false, "remarks": "정정: 이전 23.6에서 수정" },
+    { "name": "강진", "cumulativeKm": 34.7, "stationType": "STAFFED", "isKtxStop": false, "remarks": null },
+    { "name": "해남", "cumulativeKm": 48.2, "stationType": "STAFFED", "isKtxStop": false, "remarks": "정정: 이전 50.9에서 수정" },
+    { "name": "영암", "cumulativeKm": 65.9, "stationType": null, "isKtxStop": false, "remarks": "신규 확인된 역(이전 버전에 없었음)" },
+    { "name": "임성리", "cumulativeKm": 79.2, "stationType": "STAFFED", "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치. 호남선과 동일 지점" }
+  ],
+  "verification": { "officialTotalKm": 79.2, "computedTotalKm": 79.2, "match": true },
+  "sourceNotes": "2025년 9월 27일 개통(최근 신설 노선). 경전선의 지선. 별도로 '보성연결선'(미력~신보성, 2.4km)이 존재함 — 별도 파일로 기록."
+}

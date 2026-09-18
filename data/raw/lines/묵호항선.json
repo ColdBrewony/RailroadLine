@@ -1,0 +1,16 @@
+{
+  "lineName": "묵호항선",
+  "segmentLabel": null,
+  "originStation": "동해",
+  "terminusStation": "묵호",
+  "totalDistanceKmOfficial": 5.9,
+  "region": ["강원본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "동해", "cumulativeKm": 0.0, "stationType": "MANAGED", "isKtxStop": true, "remarks": "영동선/삼척선/북평선과 접속" },
+    { "name": "묵호항", "cumulativeKm": 5.1, "stationType": "FREIGHT", "isKtxStop": false, "remarks": "정정: 이전 버전에서는 이 역을 종점으로 오인, 실제로는 중간역" },
+    { "name": "묵호", "cumulativeKm": 5.9, "stationType": "MANAGED", "isKtxStop": false, "remarks": "종점, 영동선과 접속(영동선 기준 153.6)" }
+  ],
+  "verification": { "officialTotalKm": 5.9, "computedTotalKm": 5.9, "match": true },
+  "sourceNotes": "항만인입선, 화물 전용, 1961년 이래 여객열차 미운행."
+}

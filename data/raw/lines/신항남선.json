@@ -1,0 +1,15 @@
+{
+  "lineName": "신항남선",
+  "segmentLabel": null,
+  "originStation": "부산신항",
+  "terminusStation": "남철송장",
+  "totalDistanceKmOfficial": 7.7,
+  "region": ["부산경남본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "부산신항", "cumulativeKm": 0.0, "stationType": null, "isKtxStop": false, "remarks": "부산신항선과 접속" },
+    { "name": "남철송장", "cumulativeKm": 7.7, "stationType": "FREIGHT", "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치. 정정: 이전 5.8에서 수정(신항북선과 값이 뒤바뀌어 있었음)" }
+  ],
+  "verification": { "officialTotalKm": 7.7, "computedTotalKm": 7.7, "match": true },
+  "sourceNotes": "남컨테이너 부두선으로도 불림. 화물 전용, 비전철 단선."
+}

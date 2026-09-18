@@ -1,0 +1,17 @@
+{
+  "lineName": "군산화물선",
+  "segmentLabel": null,
+  "originStation": "군산화물선분기",
+  "terminusStation": "군산화물",
+  "totalDistanceKmOfficial": 8.9,
+  "region": ["전북본부"],
+  "source": "ko.wikipedia.org",
+  "status": "CLOSED",
+  "stations": [
+    { "name": "군산화물선분기", "cumulativeKm": 0.0, "stationType": null, "isKtxStop": false, "remarks": "장항선과 접속" },
+    { "name": "개정", "cumulativeKm": 3.5, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "군산화물", "cumulativeKm": 8.9, "stationType": "FREIGHT", "isKtxStop": false, "remarks": "종점, 구 옥구선과 접속" }
+  ],
+  "verification": { "officialTotalKm": 8.9, "computedTotalKm": 8.9, "match": true },
+  "sourceNotes": "2022년 3월 6일 폐선됨 — 현재 운행하지 않는 노선. 데이터베이스에는 포함하되 검색 UI에서 '폐선' 표시 필요."
+}

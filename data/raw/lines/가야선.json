@@ -1,0 +1,16 @@
+﻿{
+  "lineName": "가야선",
+  "segmentLabel": null,
+  "originStation": "사상",
+  "terminusStation": "범일",
+  "totalDistanceKmOfficial": 8.3,
+  "region": ["부산경남본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "사상", "cumulativeKm": 0.0, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "가야", "cumulativeKm": 5.1, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "범일", "cumulativeKm": 8.3, "stationType": null, "isKtxStop": false, "remarks": null }
+  ],
+  "verification": { "officialTotalKm": 8.3, "computedTotalKm": 8.3, "match": true },
+  "sourceNotes": null
+}

@@ -1,0 +1,33 @@
+{
+  "lineName": "경춘선",
+  "segmentLabel": null,
+  "originStation": "망우",
+  "terminusStation": "춘천",
+  "totalDistanceKmOfficial": 79.0,
+  "region": ["서울본부", "수도권동부본부", "강원본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "망우", "cumulativeKm": 0.0, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "신내", "cumulativeKm": 2.1, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "갈매", "cumulativeKm": 4.7, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "별내", "cumulativeKm": 6.1, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "퇴계원", "cumulativeKm": 7.7, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "사릉", "cumulativeKm": 11.0, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "금곡", "cumulativeKm": 14.6, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "평내호평", "cumulativeKm": 18.6, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "천마산", "cumulativeKm": 22.8, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "마석", "cumulativeKm": 25.0, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "대성리", "cumulativeKm": 32.4, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "청평", "cumulativeKm": 39.9, "stationType": "STAFFED", "isKtxStop": false, "remarks": null },
+    { "name": "상천", "cumulativeKm": 44.7, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "가평", "cumulativeKm": 51.8, "stationType": "STAFFED", "isKtxStop": false, "remarks": null },
+    { "name": "굴봉산", "cumulativeKm": 56.6, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": "정정: 이전 56.5에서 수정" },
+    { "name": "백양리", "cumulativeKm": 59.4, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "강촌", "cumulativeKm": 64.7, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "김유정", "cumulativeKm": 72.1, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "남춘천", "cumulativeKm": 78.0, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "춘천", "cumulativeKm": 79.0, "stationType": "MANAGED", "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치. 정정: 이전 80.7에서 수정" }
+  ],
+  "verification": { "officialTotalKm": 79.0, "computedTotalKm": 79.0, "match": true },
+  "sourceNotes": null
+}

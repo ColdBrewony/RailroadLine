@@ -1,0 +1,15 @@
+{
+  "lineName": "광양항선",
+  "segmentLabel": null,
+  "originStation": "황길",
+  "terminusStation": "광양항",
+  "totalDistanceKmOfficial": 2.7,
+  "region": ["전남본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "황길", "cumulativeKm": 0.0, "stationType": "SIGNAL_YARD", "isKtxStop": false, "remarks": "광양제철선과 접속" },
+    { "name": "광양항", "cumulativeKm": 2.7, "stationType": "FREIGHT", "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치" }
+  ],
+  "verification": { "officialTotalKm": 2.7, "computedTotalKm": 2.7, "match": true },
+  "sourceNotes": "화물 전용, 비전철 단선. 광양항 컨테이너 수송."
+}

@@ -1,0 +1,20 @@
+{
+  "lineName": "서해선",
+  "segmentLabel": "서화성-홍성",
+  "originStation": "서화성",
+  "terminusStation": "홍성",
+  "totalDistanceKmOfficial": 88.7,
+  "region": ["수도권서부본부", "대전충남본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "서화성", "cumulativeKm": 0.0, "stationType": null, "isKtxStop": false, "remarks": "기점. 정정: 이전 버전에서 기준점 해석이 불확실했으나 위키백과로 확정(서화성=0)" },
+    { "name": "화성시청", "cumulativeKm": 7.3, "stationType": null, "isKtxStop": false, "remarks": "정정: 이전 54.3(대곡 기준 오인)에서 수정" },
+    { "name": "향남", "cumulativeKm": 18.7, "stationType": null, "isKtxStop": false, "remarks": "정정: 이전 65.7에서 수정" },
+    { "name": "안중", "cumulativeKm": 37.8, "stationType": "MANAGED", "isKtxStop": false, "remarks": "평택선 분기점. 정정: 이전 84.8에서 수정" },
+    { "name": "인주", "cumulativeKm": 55.3, "stationType": null, "isKtxStop": false, "remarks": "신규 확인" },
+    { "name": "합덕", "cumulativeKm": 64.1, "stationType": null, "isKtxStop": false, "remarks": "신규 확인" },
+    { "name": "홍성", "cumulativeKm": 88.7, "stationType": null, "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치. 장항선과 접속" }
+  ],
+  "verification": { "officialTotalKm": 88.7, "computedTotalKm": 88.7, "match": true },
+  "sourceNotes": "2024년 11월 개통(최근 신설). 명칭은 '서화성-홍성'이 위키백과 공식 표기(노선 이름은 '서해선'과 동일, 기존 파일명 유지)."
+}

@@ -1,0 +1,15 @@
+{
+  "lineName": "대불선",
+  "segmentLabel": null,
+  "originStation": "일로",
+  "terminusStation": "대불",
+  "totalDistanceKmOfficial": 12.0,
+  "region": ["전남본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "일로", "cumulativeKm": 0.0, "stationType": null, "isKtxStop": false, "remarks": "호남선과 접속" },
+    { "name": "대불", "cumulativeKm": 12.0, "stationType": "UNMANNED", "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치" }
+  ],
+  "verification": { "officialTotalKm": 12.0, "computedTotalKm": 12.0, "match": true },
+  "sourceNotes": "2010년 9월부터 화물 취급 중지, 현재는 철도차량 시운전·연구개발용으로 활용."
+}

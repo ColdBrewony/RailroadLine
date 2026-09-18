@@ -1,0 +1,29 @@
+﻿{
+  "lineName": "강릉선",
+  "segmentLabel": "KTX 서비스 기준 (행신~동해)",
+  "originStation": "행신",
+  "terminusStation": "동해",
+  "totalDistanceKmOfficial": 259.9,
+  "region": ["서울본부", "수도권동부본부", "강원본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "행신", "cumulativeKm": -14.9, "stationType": null, "isKtxStop": true, "remarks": "서울보다 앞선 음수 거리로 표기됨(서울을 0 기준으로 삼은 표)" },
+    { "name": "서울", "cumulativeKm": 0.0, "stationType": "MANAGED", "isKtxStop": true, "remarks": null },
+    { "name": "청량리", "cumulativeKm": 15.9, "stationType": "MANAGED", "isKtxStop": true, "remarks": null },
+    { "name": "상봉", "cumulativeKm": 19.9, "stationType": null, "isKtxStop": true, "remarks": null },
+    { "name": "덕소", "cumulativeKm": 33.1, "stationType": null, "isKtxStop": true, "remarks": null },
+    { "name": "양평", "cumulativeKm": 63.8, "stationType": null, "isKtxStop": true, "remarks": null },
+    { "name": "서원주", "cumulativeKm": 102.3, "stationType": null, "isKtxStop": true, "remarks": null },
+    { "name": "만종", "cumulativeKm": 107.7, "stationType": "MANAGED", "isKtxStop": true, "remarks": null },
+    { "name": "횡성", "cumulativeKm": 126.0, "stationType": "MANAGED", "isKtxStop": true, "remarks": null },
+    { "name": "둔내", "cumulativeKm": 146.6, "stationType": "MANAGED", "isKtxStop": true, "remarks": null },
+    { "name": "평창", "cumulativeKm": 166.6, "stationType": "MANAGED", "isKtxStop": true, "remarks": null },
+    { "name": "진부(오대산)", "cumulativeKm": 182.9, "stationType": "MANAGED", "isKtxStop": true, "remarks": null },
+    { "name": "강릉", "cumulativeKm": 223.2, "stationType": "MANAGED", "isKtxStop": true, "remarks": null },
+    { "name": "정동진", "cumulativeKm": 231.0, "stationType": null, "isKtxStop": true, "remarks": "영동선상의 정동진(176.5)과 동일 지점" },
+    { "name": "묵호", "cumulativeKm": 253.9, "stationType": null, "isKtxStop": true, "remarks": "영동선상의 묵호(153.6)와 동일 지점" },
+    { "name": "동해", "cumulativeKm": 259.9, "stationType": "MANAGED", "isKtxStop": true, "remarks": "영동선상의 동해(147.6)와 동일 지점" }
+  ],
+  "verification": { "officialTotalKm": 223.2, "computedTotalKm": 223.2, "match": true, "note": "서울~강릉 223.2km 확인. 강릉~동해 구간(36.7km)은 KTX가 영동선 선로를 그대로 이용하는 서비스 연장 구간." },
+  "sourceNotes": "이 노선은 물리적 인프라 명칭이 아니라 'KTX 강릉선' 운행계통(서울/행신~강릉/동해) 기준. 강릉 이후 정동진·묵호·동해는 영동선 선로를 공유하며, 해당 역들은 영동선.json에도 별도로 존재함(같은 역, 다른 노선 소속으로 각각 기록)."
+}

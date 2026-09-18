@@ -1,0 +1,20 @@
+{
+  "lineName": "대구선",
+  "segmentLabel": null,
+  "originStation": "가천",
+  "terminusStation": "영천",
+  "totalDistanceKmOfficial": 26.1,
+  "region": ["대구본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "가천", "cumulativeKm": 0.0, "stationType": null, "isKtxStop": false, "remarks": "경부선과 접속. 여객 통과(미정차)" },
+    { "name": "금강", "cumulativeKm": 4.3, "stationType": null, "isKtxStop": false, "remarks": "여객 통과(미정차)" },
+    { "name": "청천", "cumulativeKm": 8.1, "stationType": "UNMANNED", "isKtxStop": false, "remarks": "여객 통과(미정차)" },
+    { "name": "하양", "cumulativeKm": 13.6, "stationType": "UNMANNED", "isKtxStop": false, "remarks": "정기 여객열차 정차" },
+    { "name": "금호", "cumulativeKm": 18.7, "stationType": null, "isKtxStop": false, "remarks": "여객 통과(미정차)" },
+    { "name": "봉정", "cumulativeKm": 23.2, "stationType": null, "isKtxStop": false, "remarks": "폐역" },
+    { "name": "영천", "cumulativeKm": 26.1, "stationType": "MANAGED", "isKtxStop": true, "remarks": "종점, 중앙선과 접속, 정기 여객열차 정차" }
+  ],
+  "verification": { "officialTotalKm": 26.1, "computedTotalKm": 26.1, "match": true },
+  "sourceNotes": "현재 정기 여객열차는 하양·영천 두 역에만 정차, 나머지는 통과 또는 폐역."
+}

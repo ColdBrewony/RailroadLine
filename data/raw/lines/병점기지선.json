@@ -1,0 +1,15 @@
+{
+  "lineName": "병점기지선",
+  "segmentLabel": null,
+  "originStation": "병점",
+  "terminusStation": "서동탄",
+  "totalDistanceKmOfficial": 2.2,
+  "region": ["수도권서부본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "병점", "cumulativeKm": 0.0, "stationType": null, "isKtxStop": false, "remarks": "경부선과 접속" },
+    { "name": "서동탄", "cumulativeKm": 2.2, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치" }
+  ],
+  "verification": { "officialTotalKm": 2.2, "computedTotalKm": 2.2, "match": true },
+  "sourceNotes": "과거 경부선 본선의 일부였으나 복복선화 과정에서 분리됨."
+}

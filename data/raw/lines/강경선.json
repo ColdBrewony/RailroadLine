@@ -1,0 +1,15 @@
+﻿{
+  "lineName": "강경선",
+  "segmentLabel": null,
+  "originStation": "채운신호장",
+  "terminusStation": "연무대",
+  "totalDistanceKmOfficial": 5.8,
+  "region": ["대전충남본부"],
+  "source": "ko.wikipedia.org",
+  "stations": [
+    { "name": "채운신호장", "cumulativeKm": 0.0, "stationType": "SIGNAL_YARD", "isKtxStop": false, "remarks": null },
+    { "name": "연무대", "cumulativeKm": 5.8, "stationType": null, "isKtxStop": false, "remarks": null }
+  ],
+  "verification": { "officialTotalKm": 5.8, "computedTotalKm": 5.8, "match": true },
+  "sourceNotes": "현재 정기 여객열차 미운행, 육군훈련소 관련 임시열차만 운행."
+}
