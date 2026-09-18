@@ -32,10 +32,22 @@
     <main id="diagram-view">
       <svg id="diagram-svg" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid meet"></svg>
       <button id="legend-toggle" type="button">범례</button>
-      <div id="legend" hidden></div>
+      <div id="legend" hidden>
+        <h3>범례</h3>
+        <ul>
+          <li><span class="legend-swatch legend-swatch-normal"></span> 일반역</li>
+          <li><span class="legend-swatch legend-swatch-transfer"></span> 환승·분기역</li>
+          <li><span class="legend-swatch legend-swatch-selected"></span> 선택된 역</li>
+        </ul>
+        <p class="legend-note">
+          노선마다 선 색이 자동으로 다르게 배정됩니다. 역 종류(관리역·무인역 등)와 KTX 정차 여부는
+          역을 클릭하면 오른쪽(모바일은 하단) 상세 패널에서 확인할 수 있습니다.
+        </p>
+      </div>
     </main>
 
     <aside id="station-detail-panel" hidden>
+      <div id="detail-drag-handle" aria-hidden="true"></div>
       <button id="detail-close" type="button" aria-label="닫기">✕</button>
       <div id="detail-content"></div>
     </aside>
