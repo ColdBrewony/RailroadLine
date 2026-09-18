@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>철도 노선도</title>
+  <link rel="stylesheet" href="/css/style.css" />
+</head>
+<body>
+  <header id="search-bar">
+    <button id="menu-toggle" type="button" aria-label="노선 목록 열기">☰</button>
+    <div id="search-box">
+      <input
+        id="search-input"
+        type="text"
+        placeholder="역 이름 검색..."
+        autocomplete="off"
+        aria-autocomplete="list"
+      />
+      <ul id="search-results" role="listbox" hidden></ul>
+    </div>
+  </header>
+
+  <div id="layout">
+    <aside id="line-list-sidebar">
+      <div id="line-list-tabs"></div>
+      <ul id="line-list"></ul>
+    </aside>
+
+    <div id="sidebar-backdrop" hidden></div>
+
+    <main id="diagram-view">
+      <svg id="diagram-svg" viewBox="0 0 1000 1000" preserveAspectRatio="xMidYMid meet"></svg>
+      <button id="legend-toggle" type="button">범례</button>
+      <div id="legend" hidden></div>
+    </main>
+
+    <aside id="station-detail-panel" hidden>
+      <button id="detail-close" type="button" aria-label="닫기">✕</button>
+      <div id="detail-content"></div>
+    </aside>
+  </div>
+
+  <script type="module" src="/js/main.js"></script>
+</body>
+</html>
