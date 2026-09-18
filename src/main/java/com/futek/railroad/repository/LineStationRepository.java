@@ -11,4 +11,10 @@ public interface LineStationRepository extends JpaRepository<LineStation, Long> 
 
     /** 역 상세(F3): 이 역이 속한 모든 노선-역 관계(환승/분기역이면 2개 이상). */
     List<LineStation> findByStation_IdOrderByLine_IdAsc(Long stationId);
+
+    /** 노선 목록(F4)의 stationCount 표시용. */
+    long countByLine_Id(Long lineId);
+
+    /** 환승역 판별(둘 이상이면 환승/분기역)용. */
+    long countByStation_Id(Long stationId);
 }
