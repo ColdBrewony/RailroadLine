@@ -1,13 +1,13 @@
 {
   "lineName": "옥구선",
   "segmentLabel": null,
-  "originStation": "군산옥산신호장",
+  "originStation": "군산옥산",
   "terminusStation": "옥구",
   "totalDistanceKmOfficial": 7.9,
   "region": ["전북본부"],
   "source": "ko.wikipedia.org",
   "stations": [
-    { "name": "군산옥산신호장", "cumulativeKm": 0.0, "stationType": "SIGNAL_YARD", "isKtxStop": false, "remarks": "군산항선과 접속" },
+    { "name": "군산옥산", "cumulativeKm": 0.0, "stationType": "SIGNAL_YARD", "isKtxStop": false, "remarks": "군산항선과 접속" },
     { "name": "옥구", "cumulativeKm": 7.9, "stationType": "UNMANNED", "isKtxStop": false, "remarks": "종점, 공식 총거리와 정확히 일치" }
   ],
   "verification": { "officialTotalKm": 7.9, "computedTotalKm": 7.9, "match": true },

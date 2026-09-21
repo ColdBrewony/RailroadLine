@@ -20,7 +20,7 @@
     { "name": "현동", "cumulativeKm": 52.7, "stationType": "UNMANNED", "isKtxStop": false, "remarks": null },
     { "name": "분천", "cumulativeKm": 59.3, "stationType": "STAFFED", "isKtxStop": false, "remarks": null },
     { "name": "비동", "cumulativeKm": 63.5, "stationType": "TEMPORARY_PLATFORM", "isKtxStop": false, "remarks": null },
-    { "name": "양원", "cumulativeKm": 65.5, "stationType": "TEMPORARY_PLATFORM", "isKtxStop": false, "remarks": null },
+    { "name": "양원(봉화)", "cumulativeKm": 65.5, "stationType": "TEMPORARY_PLATFORM", "isKtxStop": false, "remarks": null },
     { "name": "승부", "cumulativeKm": 69.2, "stationType": "UNMANNED", "isKtxStop": false, "remarks": null },
     { "name": "석포", "cumulativeKm": 76.8, "stationType": "FREIGHT", "isKtxStop": false, "remarks": null },
     { "name": "동점", "cumulativeKm": 83.0, "stationType": "UNMANNED", "isKtxStop": false, "remarks": null },

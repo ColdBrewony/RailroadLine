@@ -27,6 +27,11 @@ includeAllLabel.appendChild(includeAllCheckbox);
 includeAllLabel.appendChild(document.createTextNode("폐선/중지 포함"));
 tabsContainer.appendChild(includeAllLabel);
 
+const routeHint = document.createElement("p");
+routeHint.className = "line-list-hint";
+routeHint.textContent = "공유 구간은 한 선으로 표시합니다. 노선을 선택해 경로를 확인하세요.";
+tabsContainer.appendChild(routeHint);
+
 let debounceTimer = null;
 let currentLines = [];
 
@@ -75,10 +80,21 @@ function buildLineItem(line, active) {
   const li = document.createElement("li");
   li.className = "line-list-item" + (active ? " active" : "");
 
+  const main = document.createElement("div");
+  main.className = "line-list-main";
+
   const name = document.createElement("span");
   name.className = "line-list-name";
   name.textContent = line.segmentLabel ? `${line.name} (${line.segmentLabel})` : line.name;
-  li.appendChild(name);
+  main.appendChild(name);
+
+  if (line.regionNames && line.regionNames.length > 0) {
+    const region = document.createElement("span");
+    region.className = "line-list-region";
+    region.textContent = line.regionNames.join(", ");
+    main.appendChild(region);
+  }
+  li.appendChild(main);
 
   if (line.status && line.status !== "OPERATING") {
     const badge = document.createElement("span");

@@ -172,6 +172,13 @@ body {
   cursor: pointer;
 }
 
+.line-list-hint {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
 #line-list {
   list-style: none;
   margin: 0;
@@ -193,12 +200,26 @@ body {
   background: #eef3fb;
 }
 
-.line-list-name {
+.line-list-main {
   flex: 1 1 auto;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.line-list-name {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.line-list-region {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 11px;
+  color: var(--color-text-muted);
 }
 
 .line-list-distance {
@@ -310,6 +331,10 @@ body {
 
 .diagram-line-active {
   stroke-width: 6 !important;
+}
+
+.diagram-line-shared {
+  cursor: default;
 }
 
 .diagram-line-dimmed {
@@ -603,4 +628,7 @@ body {
   #legend {
     max-width: none;
   }
+}
+.diagram-station-estimated circle {
+  stroke-dasharray: 2 2;
 }

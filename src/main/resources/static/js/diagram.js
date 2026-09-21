@@ -36,9 +36,10 @@ let dataCenterY = 0;
 
 let diagramData = null;
 let stationIndex = new Map(); // stationId -> {stationId, name, x, y, lineIds:Set}
-let lineColorById = new Map(); // lineId -> color
 let stationNodeEls = new Map(); // stationId -> <g> element
-let linePathEls = new Map(); // lineId -> <polyline> element
+let lineIndex = new Map(); // lineId -> 원래 노선 경로(선택할 때만 표시)
+let networkGroup = null;
+let selectedLinePath = null; // 기본 구간 위에 표시하는 단 하나의 선택 경로
 
 let outlineRings = null; // [[ [x,y], ... ], ...] (역 좌표와 동일한 투영 좌표계)
 let outlineGroup = null; // renderMap()이 content를 비울 때마다 다시 맨 앞에 붙이는 배경 레이어
@@ -136,9 +137,9 @@ function buildOutlineGroup(rings) {
 
 function buildIndex() {
   stationIndex = new Map();
-  lineColorById = new Map();
+  lineIndex = new Map();
   diagramData.lines.forEach((line) => {
-    lineColorById.set(line.lineId, line.color);
+    lineIndex.set(line.lineId, line);
     line.stations.forEach((st) => {
       if (!stationIndex.has(st.stationId)) {
         stationIndex.set(st.stationId, {
@@ -146,6 +147,7 @@ function buildIndex() {
           name: st.name,
           x: Number(st.x),
           y: Number(st.y),
+          coordinateVerified: st.coordinateVerified !== false,
           lineIds: new Set(),
         });
       }
@@ -157,7 +159,8 @@ function buildIndex() {
 function renderMap() {
   content.innerHTML = "";
   stationNodeEls = new Map();
-  linePathEls = new Map();
+  networkGroup = null;
+  selectedLinePath = null;
   lastSizedScale = null; // 새로 그린 원/글자 엘리먼트는 아직 화면 픽셀 크기를 못 받았으니 강제로 재계산
 
   if (outlineGroup) {
@@ -166,36 +169,66 @@ function renderMap() {
 
   const transferSet = new Set(diagramData.transferStationIds);
 
-  const linesGroup = document.createElementNS(SVG_NS, "g");
-  linesGroup.setAttribute("class", "diagram-lines-group");
+  // 같은 두 역 사이의 연결은 진행 방향과 무관하게 하나만 그린다.
+  // 좌표가 가깝다는 이유로 다른 선로나 단순 교차 지점을 합치지는 않는다.
+  const segments = new Map();
   diagramData.lines.forEach((line) => {
-    if (line.stations.length < 2) {
-      return;
+    for (let i = 1; i < line.stations.length; i++) {
+      const from = line.stations[i - 1];
+      const to = line.stations[i];
+      if (from.stationId === to.stationId) {
+        continue;
+      }
+      const key = JSON.stringify([from.stationId, to.stationId].sort((a, b) => a - b));
+      if (!segments.has(key)) {
+        segments.set(key, { from, to, lines: new Map() });
+      }
+      segments.get(key).lines.set(line.lineId, line);
     }
-    const points = line.stations.map((st) => `${st.x},${st.y}`).join(" ");
+  });
+
+  networkGroup = document.createElementNS(SVG_NS, "g");
+  networkGroup.setAttribute("class", "diagram-lines-group");
+  segments.forEach(({ from, to, lines }) => {
+    const shared = lines.size > 1;
+    const firstLine = lines.values().next().value;
     const path = document.createElementNS(SVG_NS, "polyline");
-    path.setAttribute("points", points);
+    path.setAttribute("points", `${from.x},${from.y} ${to.x},${to.y}`);
     path.setAttribute("fill", "none");
-    path.setAttribute("stroke", line.color);
-    path.setAttribute("stroke-width", 3);
+    path.setAttribute("stroke", "#87939f");
+    path.setAttribute("stroke-width", 2);
     path.setAttribute("stroke-linecap", "round");
     path.setAttribute("stroke-linejoin", "round");
-    path.setAttribute("class", "diagram-line-path");
+    path.setAttribute("class", "diagram-line-path" + (shared ? " diagram-line-shared" : ""));
 
     const title = document.createElementNS(SVG_NS, "title");
-    title.textContent = line.segmentLabel ? `${line.name} (${line.segmentLabel})` : line.name;
+    title.textContent = [...lines.values()].map(lineDisplayName).join(" · ")
+      + (shared ? " — 노선 목록에서 선택해 경로를 확인하세요" : "");
     path.appendChild(title);
 
-    path.addEventListener("click", (event) => {
-      event.stopPropagation();
-      const isActive = getState().selectedLineId === line.lineId;
-      setState({ selectedLineId: isActive ? null : line.lineId });
-    });
-
-    linesGroup.appendChild(path);
-    linePathEls.set(line.lineId, path);
+    if (!shared) {
+      path.addEventListener("click", (event) => {
+        event.stopPropagation();
+        const isActive = getState().selectedLineId === firstLine.lineId;
+        setState({ selectedLineId: isActive ? null : firstLine.lineId });
+      });
+    }
+    networkGroup.appendChild(path);
   });
-  content.appendChild(linesGroup);
+  content.appendChild(networkGroup);
+
+  // 항상 기본 선보다 위, 역보다 아래에 있어 선택 순서와 무관하게 경로가 잘 보인다.
+  selectedLinePath = document.createElementNS(SVG_NS, "polyline");
+  selectedLinePath.setAttribute("class", "diagram-line-path diagram-line-active");
+  selectedLinePath.setAttribute("fill", "none");
+  selectedLinePath.setAttribute("stroke-linecap", "round");
+  selectedLinePath.setAttribute("stroke-linejoin", "round");
+  selectedLinePath.style.display = "none";
+  selectedLinePath.addEventListener("click", (event) => {
+    event.stopPropagation();
+    setState({ selectedLineId: null });
+  });
+  content.appendChild(selectedLinePath);
 
   const stationsGroup = document.createElementNS(SVG_NS, "g");
   stationsGroup.setAttribute("class", "diagram-stations-group");
@@ -218,8 +251,9 @@ function buildStationNode(st, isTransfer) {
   const group = document.createElementNS(SVG_NS, "g");
   group.setAttribute("class", "diagram-station" + (isTransfer ? " diagram-station-transfer" : ""));
   group.setAttribute("transform", `translate(${st.x} ${st.y})`);
+  group.classList.toggle("diagram-station-estimated", !st.coordinateVerified);
 
-  const color = lineColorById.get(st.lineIds.values().next().value) || "#666";
+  const color = "#87939f";
 
   const circle = document.createElementNS(SVG_NS, "circle");
   circle.setAttribute("r", isTransfer ? TRANSFER_RADIUS : NORMAL_RADIUS);
@@ -229,11 +263,11 @@ function buildStationNode(st, isTransfer) {
   group.appendChild(circle);
 
   const title = document.createElementNS(SVG_NS, "title");
-  title.textContent = st.name;
+  title.textContent = st.name + (st.coordinateVerified ? "" : " — 위치 미확인 (추정 배치)");
   group.appendChild(title);
 
   const label = document.createElementNS(SVG_NS, "text");
-  label.textContent = st.name;
+  label.textContent = st.name + (st.coordinateVerified ? "" : " ≈");
   label.setAttribute("class", "diagram-station-label");
   label.setAttribute("y", -12);
   label.setAttribute("text-anchor", "middle");
@@ -255,22 +289,41 @@ function highlightSelectedStation(stationId) {
 
 function highlightSelectedLine(lineId) {
   const activeStationId = getState().selectedStationId;
-  linePathEls.forEach((path, id) => {
-    path.classList.toggle("diagram-line-active", id === lineId);
-    path.classList.toggle("diagram-line-dimmed", lineId != null && id !== lineId);
-  });
+  const line = lineIndex.get(lineId);
+  networkGroup?.classList.toggle("diagram-line-dimmed", !!line);
+  if (selectedLinePath) {
+    selectedLinePath.style.display = line && line.stations.length >= 2 ? "" : "none";
+    selectedLinePath.innerHTML = "";
+    if (line) {
+      selectedLinePath.setAttribute("points", line.stations.map((st) => `${st.x},${st.y}`).join(" "));
+      selectedLinePath.setAttribute("stroke", line.color);
+      const title = document.createElementNS(SVG_NS, "title");
+      title.textContent = lineDisplayName(line);
+      selectedLinePath.appendChild(title);
+    }
+  }
   stationNodeEls.forEach((group, id) => {
     const st = stationIndex.get(id);
+    const circle = group.querySelector("circle");
+    const onLine = line && st?.lineIds.has(lineId);
+    const color = onLine ? line.color : "#87939f";
+    circle.setAttribute("stroke", color);
+    circle.setAttribute("fill", group.classList.contains("diagram-station-transfer") ? "#ffffff" : color);
     // 검색/클릭으로 선택된 역은 다른 노선이 강조된 상태여도 항상 보이게 한다.
-    const related = lineId == null || (st && st.lineIds.has(lineId)) || id === activeStationId;
+    const related = !line || (st && st.lineIds.has(lineId)) || id === activeStationId;
     group.classList.toggle("diagram-station-dimmed", !related);
   });
+}
+
+function lineDisplayName(line) {
+  return line.segmentLabel ? `${line.name} (${line.segmentLabel})` : line.name;
 }
 
 function renderPlaceholder(message) {
   content.innerHTML = "";
   stationNodeEls = new Map();
-  linePathEls = new Map();
+  networkGroup = null;
+  selectedLinePath = null;
   const text = document.createElementNS(SVG_NS, "text");
   text.setAttribute("x", 0);
   text.setAttribute("y", 0);

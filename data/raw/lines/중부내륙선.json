@@ -17,7 +17,7 @@
     { "name": "살미", "cumulativeKm": 66.6, "stationType": "MANAGED", "isKtxStop": true, "remarks": null },
     { "name": "수안보온천", "cumulativeKm": 75.1, "stationType": "MANAGED", "isKtxStop": true, "remarks": null },
     { "name": "연풍", "cumulativeKm": 81.4, "stationType": "MANAGED", "isKtxStop": true, "remarks": null },
-    { "name": "문경", "cumulativeKm": 92.7, "stationType": null, "isKtxStop": false, "remarks": "종점. 공식 총거리(94.307)와 1.6km 차이 — 위키백과 원본에도 동일한 차이 존재, 정의상 오차로 추정. 문경선 종점과 동일 지점(문경선 기준 22.3)" }
+    { "name": "문경", "cumulativeKm": 92.7, "stationType": null, "isKtxStop": false, "remarks": "종점. 공식 총거리(94.307)와 1.6km 차이 — 위키백과 원본에도 동일한 차이 존재, 정의상 오차로 추정. 2024년 개업한 신역이며 문경선의 문경(구역)과 다른 지점" }
   ],
   "verification": { "officialTotalKm": 94.307, "computedTotalKm": 92.7, "match": true, "note": "위키백과 자체에도 존재하는 1.6km 근사 오차" },
   "sourceNotes": "부발~충주 2021년, 판교 연장 2023년, 충주~문경 2024년 순차 개통."
