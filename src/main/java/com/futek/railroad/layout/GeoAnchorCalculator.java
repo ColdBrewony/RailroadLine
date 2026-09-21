@@ -55,6 +55,15 @@ public class GeoAnchorCalculator {
     private static final double DEFAULT_LNG = 127.8;
 
     /**
+     * data/raw/station-coordinates.csv 원본에 있는 것으로 확인된 오류를 바로잡는다(원본 파일은
+     * 그대로 두고 여기서만 교정 — station-coordinates.README.md 참고). 청량리역은 원본에
+     * (37.11298, 129.036482)로 돼 있는데 이는 서울이 아니라 강원 동해안 좌표다. 지역본부
+     * 범위 검증이 노선에 "강원본부"가 포함돼 있으면 이 값도 통과시켜 버려(그 지역 범위 자체가
+     * 넓어서) 실제 서울 위치로 바로잡는다.
+     */
+    private static final Map<String, double[]> COORDINATE_OVERRIDES = Map.of("청량리", new double[] {37.5802, 127.0466});
+
+    /**
      * 코레일 지역본부 이름 -> 그 지역의 대략적인 위경도 범위(latMin, latMax, lngMin, lngMax).
      * 눈대중으로 잡은 근사치이며 두 가지 용도로 쓰인다: (1) 실측 좌표가 엉뚱한 값인지 검증,
      * (2) 실측 닻이 전혀 없는 노선에서 지역 중심점을 "가짜 닻"으로 대신 쓸 때의 좌표.
@@ -62,7 +71,10 @@ public class GeoAnchorCalculator {
     private static final Map<String, double[]> REGION_BOUNDS = Map.ofEntries(
             Map.entry("서울본부", new double[] {37.30, 37.80, 126.70, 127.30}),
             Map.entry("수도권서부본부", new double[] {37.20, 37.80, 126.30, 126.90}),
-            Map.entry("수도권동부본부", new double[] {37.20, 37.90, 127.00, 127.60}),
+            // 경원선(의정부~신탄리/백마고지, DMZ 인접)이 이 지역본부 소속이라 위도 상한을
+            // 37.90에서 38.35까지 넓혔다 — 실제로 그 구간 역들이 이 범위 밖으로 검증에서
+            // 걸러지는 문제를 발견해서 수정함.
+            Map.entry("수도권동부본부", new double[] {37.20, 38.35, 127.00, 127.60}),
             Map.entry("강원본부", new double[] {37.10, 38.60, 127.60, 129.40}),
             Map.entry("충북본부", new double[] {36.30, 37.20, 127.20, 128.20}),
             Map.entry("대전충남본부", new double[] {36.00, 37.10, 126.30, 127.60}),
@@ -106,28 +118,35 @@ public class GeoAnchorCalculator {
                 }
             }
 
-            if (anchorPos.isEmpty()) {
-                // 이 노선엔 실측 닻이 하나도 없다: 지역본부 중심들을 순서대로 "가짜 닻"으로 대신 쓴다.
+            // 실측 닻이 2개 미만이면 보간할 "형태"가 안 나온다 — 0개는 위치 정보가 전혀 없는
+            // 것이고, 1개뿐이면 노선 전체가 그 한 점 주변에 다 몰려버린다(경원선처럼 실측 닻이
+            // 서울 쪽 역 1곳뿐인데 노선이 한참 북쪽까지 이어지는 경우 특히 심각함). 그래서 부족한
+            // 만큼 지역본부 중심을 노선 길이에 맞춰 섞어 넣어 최소한의 퍼짐을 보장한다.
+            if (anchorPos.size() < 2 && !regions.isEmpty()) {
+                List<Integer> regionPos = new ArrayList<>();
+                List<double[]> regionLatLng = new ArrayList<>();
                 for (String region : regions) {
                     double[] bounds = REGION_BOUNDS.get(region);
                     if (bounds == null) {
                         continue;
                     }
-                    anchorPos.add(anchorPos.isEmpty() ? 0 : anchorPos.get(anchorPos.size() - 1));
-                    anchorLatLng.add(new double[] {(bounds[0] + bounds[1]) / 2, (bounds[2] + bounds[3]) / 2});
+                    regionPos.add(0); // 아래에서 노선 길이에 맞춰 다시 분산시킬 임시값
+                    regionLatLng.add(new double[] {(bounds[0] + bounds[1]) / 2, (bounds[2] + bounds[3]) / 2});
                 }
-                // 지역본부들을 노선 길이에 맞춰 고르게 흩어 놓는다(전부 같은 index면 보간이 안 되므로).
-                for (int k = 0; k < anchorPos.size(); k++) {
-                    anchorPos.set(k, (int) ((long) k * (ordered.size() - 1) / Math.max(1, anchorPos.size() - 1)));
+                for (int k = 0; k < regionPos.size(); k++) {
+                    regionPos.set(k, (int) ((long) k * (ordered.size() - 1) / Math.max(1, regionPos.size() - 1)));
                 }
+                anchorPos.addAll(regionPos);
+                anchorLatLng.addAll(regionLatLng);
+                sortAnchorsByPosition(anchorPos, anchorLatLng);
             }
             if (anchorPos.isEmpty()) {
                 continue; // 지역 정보조차 없는 노선(사실상 없음): 기본값에 맡긴다.
             }
 
-            // 닻이 하나뿐인 노선은 보간할 게 없어 모든 역이 정확히 같은 점에 겹친다.
-            // "정확한 좌표"라는 원칙은 지키되, 완전히 안 보이게 겹치지는 않도록 노선 순서에 따라
-            // 아주 작게(약 수십~수백 m) 나선형으로 흩어 최소한의 시인성만 확보한다.
+            // 그래도 닻이 하나뿐이면(지역본부가 1개뿐인 아주 짧은 노선 등) 여전히 모든 역이
+            // 같은 점에 겹친다. "정확한 좌표" 원칙은 지키되 완전히 안 보이게 겹치지는 않도록
+            // 노선 순서에 따라 아주 작게(약 수십~수백 m) 나선형으로 흩어 최소 시인성만 확보한다.
             boolean singleAnchor = anchorPos.size() == 1;
             for (int i = 0; i < ordered.size(); i++) {
                 Integer idx = indexOf.get(ordered.get(i).getStation().getId());
@@ -242,6 +261,26 @@ public class GeoAnchorCalculator {
         return new double[] {a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1])};
     }
 
+    /** 실측 닻과 지역본부 "가짜 닻"을 섞은 뒤, interpolate()가 가정하는 대로 위치(index) 오름차순으로 정렬한다. */
+    private void sortAnchorsByPosition(List<Integer> anchorPos, List<double[]> anchorLatLng) {
+        Integer[] order = new Integer[anchorPos.size()];
+        for (int i = 0; i < order.length; i++) {
+            order[i] = i;
+        }
+        java.util.Arrays.sort(order, (a, b) -> Integer.compare(anchorPos.get(a), anchorPos.get(b)));
+
+        List<Integer> sortedPos = new ArrayList<>(anchorPos.size());
+        List<double[]> sortedLatLng = new ArrayList<>(anchorLatLng.size());
+        for (int idx : order) {
+            sortedPos.add(anchorPos.get(idx));
+            sortedLatLng.add(anchorLatLng.get(idx));
+        }
+        anchorPos.clear();
+        anchorPos.addAll(sortedPos);
+        anchorLatLng.clear();
+        anchorLatLng.addAll(sortedLatLng);
+    }
+
     private List<String> parseRegions(String regionNames) {
         if (regionNames == null || regionNames.isBlank()) {
             return List.of();
@@ -273,7 +312,8 @@ public class GeoAnchorCalculator {
                 try {
                     double lat = Double.parseDouble(parts[1]);
                     double lng = Double.parseDouble(parts[2]);
-                    result.put(parts[0], new double[] {lat, lng});
+                    double[] override = COORDINATE_OVERRIDES.get(parts[0]);
+                    result.put(parts[0], override != null ? override : new double[] {lat, lng});
                 } catch (NumberFormatException ignored) {
                     // 잘못된 행은 건너뛴다.
                 }
