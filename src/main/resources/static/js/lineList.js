@@ -1,6 +1,7 @@
 // F4(노선 목록): docs/06-search-ui.md 4장.
 // 원안은 LineCategory 필터 탭이었으나, 데이터 모델 v2에서 Line.category가
-// 제거되어(실수집 안 됨) 대신 노선명 필터 입력 + "폐선/중지 포함" 토글로 대체한다.
+// 제거되어(실수집 안 됨) 대신 노선명 필터 입력으로 대체한다. 정상 운행 중인
+// 노선만 보여준다(폐선/중지 포함 조회는 UI에서 제공하지 않는다).
 import { getLines } from "./api.js";
 import { getState, setState, subscribe } from "./state.js";
 
@@ -19,14 +20,6 @@ filterInput.id = "line-filter-input";
 filterInput.placeholder = "노선명 필터...";
 tabsContainer.appendChild(filterInput);
 
-const includeAllLabel = document.createElement("label");
-includeAllLabel.className = "line-filter-toggle";
-const includeAllCheckbox = document.createElement("input");
-includeAllCheckbox.type = "checkbox";
-includeAllLabel.appendChild(includeAllCheckbox);
-includeAllLabel.appendChild(document.createTextNode("폐선/중지 포함"));
-tabsContainer.appendChild(includeAllLabel);
-
 const routeHint = document.createElement("p");
 routeHint.className = "line-list-hint";
 routeHint.textContent = "공유 구간은 한 선으로 표시합니다. 노선을 선택해 경로를 확인하세요.";
@@ -39,11 +32,10 @@ filterInput.addEventListener("input", () => {
   clearTimeout(debounceTimer);
   debounceTimer = setTimeout(loadLines, 200);
 });
-includeAllCheckbox.addEventListener("change", loadLines);
 
 async function loadLines() {
   try {
-    const res = await getLines(filterInput.value.trim(), includeAllCheckbox.checked);
+    const res = await getLines(filterInput.value.trim());
     currentLines = res.items;
     renderList();
   } catch (err) {
@@ -109,8 +101,20 @@ function buildLineItem(line, active) {
   li.appendChild(distance);
 
   li.addEventListener("click", () => {
-    const isActive = getState().selectedLineId === line.lineId;
-    setState({ selectedLineId: isActive ? null : line.lineId, sidebarOpen: false });
+    const state = getState();
+    const isActive = state.selectedLineId === line.lineId;
+    if (isActive) {
+      const closingShownLine = state.detailView?.type === "line" && state.detailView.id === line.lineId;
+      setState({ selectedLineId: null, sidebarOpen: false, detailView: closingShownLine ? null : state.detailView });
+    } else {
+      // 노선을 고르면 이전에 선택돼 있던 역 정보는 지우고 이 노선만 보여준다.
+      setState({
+        selectedLineId: line.lineId,
+        selectedStationId: null,
+        sidebarOpen: false,
+        detailView: { type: "line", id: line.lineId },
+      });
+    }
   });
 
   return li;

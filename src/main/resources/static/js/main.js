@@ -1,8 +1,8 @@
 import { getState, setState, subscribe } from "./state.js";
-import "./search.js";
-import "./detailPanel.js";
-import "./lineList.js?v=20260921-network";
-import "./diagram.js?v=20260921-network";
+import "./search.js?v=20260921-detail6";
+import "./detailPanel.js?v=20260921-detail6";
+import "./lineList.js?v=20260921-detail6";
+import "./diagram.js?v=20260921-detail6";
 
 const sidebar = document.getElementById("line-list-sidebar");
 const backdrop = document.getElementById("sidebar-backdrop");
