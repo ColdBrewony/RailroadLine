@@ -2,6 +2,7 @@ package com.futek.railroad.service.dto;
 
 import java.math.BigDecimal;
 
-/** 전체 노선도(F1) 한 역의 좌표. 좌표는 force-directed 자동 배치 결과이며 지리 좌표가 아니다. */
-public record DiagramStation(Long stationId, String name, BigDecimal x, BigDecimal y) {
+/** 위경도를 지도 평면에 투영한 위치와 외부 출처 대조 여부. */
+public record DiagramStation(Long stationId, String name, BigDecimal x, BigDecimal y,
+        boolean coordinateVerified) {
 }

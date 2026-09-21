@@ -3,6 +3,7 @@ package com.futek.railroad.service;
 import com.futek.railroad.domain.Line;
 import com.futek.railroad.domain.LineStation;
 import com.futek.railroad.domain.LineStatus;
+import com.futek.railroad.layout.VerifiedStationCoordinates;
 import com.futek.railroad.repository.LineRepository;
 import com.futek.railroad.repository.LineStationRepository;
 import com.futek.railroad.service.dto.DiagramLine;
@@ -22,10 +23,13 @@ public class DiagramService {
 
     private final LineRepository lineRepository;
     private final LineStationRepository lineStationRepository;
+    private final VerifiedStationCoordinates coordinates;
 
-    public DiagramService(LineRepository lineRepository, LineStationRepository lineStationRepository) {
+    public DiagramService(LineRepository lineRepository, LineStationRepository lineStationRepository,
+            VerifiedStationCoordinates coordinates) {
         this.lineRepository = lineRepository;
         this.lineStationRepository = lineStationRepository;
+        this.coordinates = coordinates;
     }
 
     public DiagramResponse getFullDiagram() {
@@ -43,7 +47,8 @@ public class DiagramService {
                         ls.getStation().getId(),
                         ls.getStation().getName(),
                         ls.getStation().getDiagramX(),
-                        ls.getStation().getDiagramY()));
+                        ls.getStation().getDiagramY(),
+                        coordinates.contains(ls.getStation().getName())));
             }
             diagramLines.add(new DiagramLine(
                     line.getId(), line.getName(), line.getSegmentLabel(), colorForLine(line.getId()), diagramStations));

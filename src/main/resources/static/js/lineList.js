@@ -27,6 +27,11 @@ includeAllLabel.appendChild(includeAllCheckbox);
 includeAllLabel.appendChild(document.createTextNode("폐선/중지 포함"));
 tabsContainer.appendChild(includeAllLabel);
 
+const routeHint = document.createElement("p");
+routeHint.className = "line-list-hint";
+routeHint.textContent = "공유 구간은 한 선으로 표시합니다. 노선을 선택해 경로를 확인하세요.";
+tabsContainer.appendChild(routeHint);
+
 let debounceTimer = null;
 let currentLines = [];
 

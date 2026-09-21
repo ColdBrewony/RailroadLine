@@ -61,7 +61,17 @@ public class GeoAnchorCalculator {
      * 범위 검증이 노선에 "강원본부"가 포함돼 있으면 이 값도 통과시켜 버려(그 지역 범위 자체가
      * 넓어서) 실제 서울 위치로 바로잡는다.
      */
-    private static final Map<String, double[]> COORDINATE_OVERRIDES = Map.of("청량리", new double[] {37.5802, 127.0466});
+    // 2026-09-21 검증 출처/원본과의 차이: data/raw/station-coordinate-audit.csv.
+    private static final Map<String, double[]> COORDINATE_OVERRIDES = Map.ofEntries(
+            Map.entry("청량리", new double[] {37.5802, 127.0466}),
+            Map.entry("철암", new double[] {37.1128861, 129.0369556}),
+            Map.entry("서원주", new double[] {37.3498, 127.837}),
+            Map.entry("횡성", new double[] {37.48278, 128.01028}),
+            Map.entry("둔내", new double[] {37.51000, 128.22111}),
+            Map.entry("평창", new double[] {37.56222, 128.43000}),
+            Map.entry("진부(오대산)", new double[] {37.64250, 128.57472}),
+            Map.entry("여천", new double[] {34.77944, 127.66722}),
+            Map.entry("여수엑스포", new double[] {34.75778, 127.74722}));
 
     /**
      * 코레일 지역본부 이름 -> 그 지역의 대략적인 위경도 범위(latMin, latMax, lngMin, lngMax).
@@ -70,37 +80,47 @@ public class GeoAnchorCalculator {
      */
     private static final Map<String, double[]> REGION_BOUNDS = Map.ofEntries(
             Map.entry("서울본부", new double[] {37.30, 37.80, 126.70, 127.30}),
-            Map.entry("수도권서부본부", new double[] {37.20, 37.80, 126.30, 126.90}),
+            // 경의선 문산/도라산까지 포함한다(기존 위도 상한 37.80은 두 역을 제외함).
+            Map.entry("수도권서부본부", new double[] {37.20, 37.95, 126.30, 126.90}),
             // 경원선(의정부~신탄리/백마고지, DMZ 인접)이 이 지역본부 소속이라 위도 상한을
             // 37.90에서 38.35까지 넓혔다 — 실제로 그 구간 역들이 이 범위 밖으로 검증에서
             // 걸러지는 문제를 발견해서 수정함.
-            Map.entry("수도권동부본부", new double[] {37.20, 38.35, 127.00, 127.60}),
+            // 경강선 여주(127.62857E)도 포함한다.
+            Map.entry("수도권동부본부", new double[] {37.20, 38.35, 127.00, 127.70}),
             Map.entry("강원본부", new double[] {37.10, 38.60, 127.60, 129.40}),
             Map.entry("충북본부", new double[] {36.30, 37.20, 127.20, 128.20}),
             Map.entry("대전충남본부", new double[] {36.00, 37.10, 126.30, 127.60}),
             Map.entry("전북본부", new double[] {35.40, 36.20, 126.40, 127.60}),
             Map.entry("광주본부", new double[] {34.80, 35.40, 126.60, 127.20}),
-            Map.entry("전남본부", new double[] {34.30, 35.40, 126.20, 127.60}),
-            Map.entry("경북본부", new double[] {35.60, 37.10, 128.20, 129.50}),
+            // 전라선 여천/여수엑스포의 정상 좌표가 127.60E 밖이라 버려지던 문제 수정.
+            Map.entry("전남본부", new double[] {34.30, 35.40, 126.20, 127.80}),
+            // 경북선 김천/옥산/청리/상주/함창은 128.20E보다 서쪽에 있다.
+            Map.entry("경북본부", new double[] {35.60, 37.10, 128.00, 129.50}),
             Map.entry("대구본부", new double[] {35.60, 36.20, 128.20, 128.90}),
             Map.entry("부산경남본부", new double[] {34.70, 35.70, 127.80, 129.40}));
 
     private final LineRepository lineRepository;
     private final LineStationRepository lineStationRepository;
+    private final VerifiedStationCoordinates verifiedCoordinates;
 
-    public GeoAnchorCalculator(LineRepository lineRepository, LineStationRepository lineStationRepository) {
+    public GeoAnchorCalculator(LineRepository lineRepository, LineStationRepository lineStationRepository,
+            VerifiedStationCoordinates verifiedCoordinates) {
         this.lineRepository = lineRepository;
         this.lineStationRepository = lineStationRepository;
+        this.verifiedCoordinates = verifiedCoordinates;
     }
 
     /** 역 id -> 배열 인덱스(indexOf)를 기준으로, 캔버스 단위의 anchorX/Y 배열을 계산해 돌려준다. */
     public double[][] compute(Map<Long, Integer> indexOf, int n) {
         Map<String, double[]> realCoords = loadRealCoordinates();
+        verifiedCoordinates.all().forEach((name, point) ->
+                realCoords.put(name, new double[] {point.lat(), point.lng()}));
         Map<String, double[]> regionCenters = computeEmpiricalRegionCenters(realCoords);
 
         double[] sumLat = new double[n];
         double[] sumLng = new double[n];
         double[] weight = new double[n];
+        double[][] acceptedRealCoords = new double[n][];
 
         for (Line line : lineRepository.findAll()) {
             List<LineStation> ordered = lineStationRepository.findByLine_IdOrderBySequenceNoAsc(line.getId());
@@ -113,9 +133,14 @@ public class GeoAnchorCalculator {
             List<double[]> anchorLatLng = new ArrayList<>();
             for (int i = 0; i < ordered.size(); i++) {
                 double[] latLng = realCoords.get(ordered.get(i).getStation().getName());
-                if (latLng != null && isPlausible(latLng, regions)) {
+                if (latLng != null && (verifiedCoordinates.contains(ordered.get(i).getStation().getName())
+                        || isPlausible(latLng, regions))) {
                     anchorPos.add(i);
                     anchorLatLng.add(latLng);
+                    Integer idx = indexOf.get(ordered.get(i).getStation().getId());
+                    if (idx != null) {
+                        acceptedRealCoords[idx] = latLng;
+                    }
                 }
             }
             // 이 노선이 확보한 실측 닻 개수를, 여러 노선이 같은 역을 공유할 때 최종 평균에서
@@ -202,7 +227,12 @@ public class GeoAnchorCalculator {
         double[] lat = new double[n];
         double[] lng = new double[n];
         for (int i = 0; i < n; i++) {
-            if (weight[i] > 0) {
+            // 어느 소속 노선에서든 지역 검증을 통과한 실측값은 확정 위치다. 다른 노선의
+            // 지역 경계 오판/가상 닻/외삽 결과를 평균해서 그 위치를 밀어내면 안 된다.
+            if (acceptedRealCoords[i] != null) {
+                lat[i] = acceptedRealCoords[i][0];
+                lng[i] = acceptedRealCoords[i][1];
+            } else if (weight[i] > 0) {
                 lat[i] = sumLat[i] / weight[i];
                 lng[i] = sumLng[i] / weight[i];
             } else {

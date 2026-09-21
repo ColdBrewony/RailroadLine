@@ -2,7 +2,7 @@
   "lineName": "문경선",
   "segmentLabel": null,
   "originStation": "점촌",
-  "terminusStation": "문경",
+  "terminusStation": "문경(구역)",
   "totalDistanceKmOfficial": 22.3,
   "region": ["경북본부"],
   "source": "ko.wikipedia.org",
@@ -11,8 +11,8 @@
     { "name": "점촌", "cumulativeKm": 0.0, "stationType": null, "isKtxStop": false, "remarks": "경북선 접속" },
     { "name": "주평", "cumulativeKm": 7.1, "stationType": null, "isKtxStop": false, "remarks": "영업중지" },
     { "name": "진남", "cumulativeKm": 12.8, "stationType": "SIGNAL_STATION", "isKtxStop": false, "remarks": "가은선 접속" },
-    { "name": "문경", "cumulativeKm": 22.3, "stationType": null, "isKtxStop": false, "remarks": "종점, 중부내륙선 접속, 공식 총거리와 정확히 일치" }
+    { "name": "문경(구역)", "cumulativeKm": 22.3, "stationType": null, "isKtxStop": false, "remarks": "구 문경선 종점. 2024년 개업한 중부내륙선 문경역과 다른 위치이므로 분리" }
   ],
   "verification": { "officialTotalKm": 22.3, "computedTotalKm": 22.3, "match": true },
-  "sourceNotes": "현재 여객 영업중지 상태. 마원~문경 구간에서 레일바이크 관광용으로 활용 중. 가은선(진남 접속) 별도 확인 필요."
+  "sourceNotes": "현재 여객 영업중지 상태. 마원~문경 구간에서 레일바이크 관광용으로 활용 중. 가은선(진남 접속) 별도 확인 필요. 좌표 감사(2026-09-21): 구 문경역은 Wikidata Q1597551, 중부내륙선 신역은 Q126389907로 서로 다른 지점. 구역을 문경(구역)으로 구분함."
 }

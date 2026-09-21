@@ -172,6 +172,13 @@ body {
   cursor: pointer;
 }
 
+.line-list-hint {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
 #line-list {
   list-style: none;
   margin: 0;
@@ -324,6 +331,10 @@ body {
 
 .diagram-line-active {
   stroke-width: 6 !important;
+}
+
+.diagram-line-shared {
+  cursor: default;
 }
 
 .diagram-line-dimmed {
@@ -617,4 +628,7 @@ body {
   #legend {
     max-width: none;
   }
+}
+.diagram-station-estimated circle {
+  stroke-dasharray: 2 2;
 }
