@@ -14,9 +14,12 @@ const FIT_PADDING = 40;
 const TRANSFER_RADIUS = 7;
 const NORMAL_RADIUS = 4;
 const MIN_SCALE = 0.4;
-const MAX_SCALE = 10;
-const FOCUS_SCALE = 3;
+// 이제 역을 실제 좌표에 그대로 배치하고(디클러터링 없음) 지도 전체 범위를 기준으로 축척을
+// 잡기 때문에, 서울처럼 역이 촘촘한 구간은 아주 깊이 확대해야 점들이 서로 떨어져 보인다.
+const MAX_SCALE = 80;
+const FOCUS_SCALE = 15;
 const LABEL_SCALE_THRESHOLD = 2.2;
+const WHEEL_ZOOM_FACTOR = 1.2;
 
 const svg = document.getElementById("diagram-svg");
 const resetViewBtn = document.getElementById("reset-view");
@@ -39,6 +42,18 @@ let linePathEls = new Map(); // lineId -> <polyline> element
 
 let outlineRings = null; // [[ [x,y], ... ], ...] (역 좌표와 동일한 투영 좌표계)
 let outlineGroup = null; // renderMap()이 content를 비울 때마다 다시 맨 앞에 붙이는 배경 레이어
+
+// 역이 실제 좌표에 그대로 놓이다 보니(디클러터링 없음) 확대 배율에 따라 점/글자 크기를
+// 화면 픽셀 기준으로 다시 계산해야 한다(내용 좌표계 그대로면 확대할수록 원이 거대해짐).
+let stationCircleEls = []; // [{circle, isTransfer}]
+let lastSizedScale = null;
+const NORMAL_RADIUS_PX = 4;
+const TRANSFER_RADIUS_PX = 7;
+const LABEL_FONT_PX = 11;
+const MIN_CONTENT_RADIUS = 0.15;
+const MAX_CONTENT_RADIUS = 24;
+const MIN_CONTENT_FONT = 0.4;
+const MAX_CONTENT_FONT = 60;
 
 let currentStationId = null;
 let currentLineId = null;
@@ -143,6 +158,7 @@ function renderMap() {
   content.innerHTML = "";
   stationNodeEls = new Map();
   linePathEls = new Map();
+  lastSizedScale = null; // 새로 그린 원/글자 엘리먼트는 아직 화면 픽셀 크기를 못 받았으니 강제로 재계산
 
   if (outlineGroup) {
     content.appendChild(outlineGroup);
@@ -183,11 +199,17 @@ function renderMap() {
 
   const stationsGroup = document.createElementNS(SVG_NS, "g");
   stationsGroup.setAttribute("class", "diagram-stations-group");
+  stationCircleEls = [];
   stationIndex.forEach((st) => {
     const isTransfer = transferSet.has(st.stationId);
     const group = buildStationNode(st, isTransfer);
     stationsGroup.appendChild(group);
     stationNodeEls.set(st.stationId, group);
+    stationCircleEls.push({
+      circle: group.querySelector("circle"),
+      label: group.querySelector(".diagram-station-label"),
+      isTransfer,
+    });
   });
   content.appendChild(stationsGroup);
 }
@@ -323,9 +345,35 @@ function applyTransform(animate) {
     `translate(${transform.tx} ${transform.ty}) scale(${s}) translate(${-dataCenterX} ${-dataCenterY})`
   );
   content.classList.toggle("show-labels", transform.scale > LABEL_SCALE_THRESHOLD);
+  updateStationVisualSizes(s);
   if (animate) {
     window.setTimeout(() => content.classList.remove("diagram-animate"), 450);
   }
+}
+
+/**
+ * 역을 실제 좌표 그대로 그리다 보니(디클러터링 없음) 확대할수록 점/글자가 내용 좌표계 기준으로
+ * 커진다. 화면상 크기를 항상 일정하게 유지하도록 현재 전체 배율(s)의 역수로 반지름/글자
+ * 크기를 다시 계산한다 — 실제 지도 서비스의 마커/라벨이 줌과 무관하게 일정 크기로 보이는 것과
+ * 같은 방식이다.
+ */
+function updateStationVisualSizes(s) {
+  if (s === lastSizedScale) {
+    return; // 순수 드래그(팬)처럼 배율이 안 바뀌었으면 723개 역을 매번 다시 계산하지 않는다.
+  }
+  lastSizedScale = s;
+  const scale = Math.max(1e-6, s);
+  const normalR = clamp(NORMAL_RADIUS_PX / scale, MIN_CONTENT_RADIUS, MAX_CONTENT_RADIUS);
+  const transferR = clamp(TRANSFER_RADIUS_PX / scale, MIN_CONTENT_RADIUS * 1.5, MAX_CONTENT_RADIUS * 1.5);
+  const fontSize = clamp(LABEL_FONT_PX / scale, MIN_CONTENT_FONT, MAX_CONTENT_FONT);
+  const labelOffset = -normalR * 3;
+  stationCircleEls.forEach(({circle, label, isTransfer}) => {
+    circle.setAttribute("r", isTransfer ? transferR : normalR);
+    if (label) {
+      label.style.fontSize = `${fontSize}px`;
+      label.setAttribute("y", labelOffset);
+    }
+  });
 }
 
 function clamp(value, min, max) {
@@ -385,7 +433,7 @@ function setupPanZoom() {
       const pointerX = (event.clientX - rect.left) * scaleX;
       const pointerY = (event.clientY - rect.top) * scaleY;
 
-      const factor = event.deltaY < 0 ? 1.15 : 1 / 1.15;
+      const factor = event.deltaY < 0 ? WHEEL_ZOOM_FACTOR : 1 / WHEEL_ZOOM_FACTOR;
       const newScale = clamp(transform.scale * factor, MIN_SCALE, MAX_SCALE);
       const ratio = newScale / transform.scale;
 
