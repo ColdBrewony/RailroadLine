@@ -1,6 +1,8 @@
-// F3(역 상세 정보): docs/06-search-ui.md 3장 — 소속 노선마다 카드 하나,
-// 각 카드에 이전/다음역과 구간거리. 이전/다음역 클릭 시 그 역으로 연쇄 이동.
-import { getStationDetail } from "./api.js";
+// F3(역 상세 정보) + F4(노선 상세 정보): docs/06-search-ui.md 3장.
+// 지도/사이드바에서 역을 클릭하면 소속 노선마다 카드 하나(이전/다음역·구간거리),
+// 노선을 클릭하면 그 노선의 전체 역 목록을 이 패널에 보여준다. 여러 노선이 겹치는
+// 구간을 클릭했을 때는 어느 노선인지 고르는 목록을 먼저 보여준다.
+import { getStationDetail, getLineDetail } from "./api.js";
 import { setState, subscribe } from "./state.js";
 
 const STATION_TYPE_LABELS = {
@@ -24,23 +26,36 @@ const panel = document.getElementById("station-detail-panel");
 const closeBtn = document.getElementById("detail-close");
 const content = document.getElementById("detail-content");
 
+// 무엇을 보고 있었든, 닫으면 역/노선 선택과 지도 강조를 전부 지우고 전체 노선망으로 돌아간다.
 closeBtn.addEventListener("click", () => {
-  setState({ selectedStationId: null });
+  setState({ selectedStationId: null, selectedLineId: null, detailView: null });
 });
 
 let currentRequestId = 0;
+let currentView = null;
 
 subscribe((state) => {
-  if (state.selectedStationId == null) {
+  const view = state.detailView;
+  if (view === currentView) {
+    return; // 다른 상태(패널과 무관한 것)만 바뀐 경우 다시 그리지 않는다.
+  }
+  currentView = view;
+  if (!view) {
     panel.hidden = true;
     content.innerHTML = "";
     return;
   }
   panel.hidden = false;
-  loadDetail(state.selectedStationId);
+  if (view.type === "station") {
+    loadStationDetail(view.id);
+  } else if (view.type === "line") {
+    loadLineDetail(view.id);
+  } else if (view.type === "segment") {
+    renderSegmentChooser(view.segmentLines);
+  }
 });
 
-async function loadDetail(stationId) {
+async function loadStationDetail(stationId) {
   const requestId = ++currentRequestId;
   renderLoading();
   try {
@@ -54,7 +69,25 @@ async function loadDetail(stationId) {
       return;
     }
     console.error("[railroad] 역 상세 조회 실패:", err);
-    renderError(stationId);
+    renderError(() => loadStationDetail(stationId));
+  }
+}
+
+async function loadLineDetail(lineId) {
+  const requestId = ++currentRequestId;
+  renderLoading();
+  try {
+    const detail = await getLineDetail(lineId);
+    if (requestId !== currentRequestId) {
+      return;
+    }
+    renderLineDetail(detail);
+  } catch (err) {
+    if (requestId !== currentRequestId) {
+      return;
+    }
+    console.error("[railroad] 노선 상세 조회 실패:", err);
+    renderError(() => loadLineDetail(lineId));
   }
 }
 
@@ -66,7 +99,7 @@ function renderLoading() {
   content.appendChild(p);
 }
 
-function renderError(stationId) {
+function renderError(retryFn) {
   content.innerHTML = "";
   const p = document.createElement("p");
   p.className = "detail-error";
@@ -77,7 +110,7 @@ function renderError(stationId) {
   retry.type = "button";
   retry.className = "detail-retry";
   retry.textContent = "다시 시도";
-  retry.addEventListener("click", () => loadDetail(stationId));
+  retry.addEventListener("click", retryFn);
   content.appendChild(retry);
 }
 
@@ -125,53 +158,177 @@ function buildLineCard(line) {
   }
   card.appendChild(title);
 
-  const row = document.createElement("div");
-  row.className = "line-card-row";
+  const nav = document.createElement("div");
+  nav.className = "station-nav";
+  nav.appendChild(buildStationNavSlot(line.prevStation, "prev"));
+  nav.appendChild(buildStationNavCurrent());
+  nav.appendChild(buildStationNavSlot(line.nextStation, "next"));
+  card.appendChild(nav);
 
-  if (line.prevStation) {
-    row.appendChild(buildNeighborLink(line.prevStation));
-    row.appendChild(buildDistance(line.prevStation.distanceKm));
-  } else {
-    row.appendChild(buildTag("기점"));
-  }
-
-  const current = document.createElement("span");
-  current.className = "line-card-current";
-  current.textContent = "현재역";
-  row.appendChild(current);
-
-  if (line.nextStation) {
-    row.appendChild(buildDistance(line.nextStation.distanceKm));
-    row.appendChild(buildNeighborLink(line.nextStation));
-  } else {
-    row.appendChild(buildTag("종점"));
-  }
-
-  card.appendChild(row);
   return card;
 }
 
-function buildNeighborLink(neighbor) {
+/** 가운데(현재역) 칸. 역 이름은 패널 위쪽 제목에 이미 있으니 여기서는 "현재역"만 표시한다. */
+function buildStationNavCurrent() {
+  const div = document.createElement("div");
+  div.className = "station-nav-current";
+  div.textContent = "현재역";
+  return div;
+}
+
+/** 이전/다음역 칸. 역이 있으면 화살표+이름+거리를 담은 큼직한 버튼, 없으면(기점/종점) 흐린 표시. */
+function buildStationNavSlot(neighbor, direction) {
+  const isPrev = direction === "prev";
+  if (!neighbor) {
+    const placeholder = document.createElement("div");
+    placeholder.className = `station-nav-btn station-nav-${direction} station-nav-placeholder`;
+    placeholder.textContent = isPrev ? "기점" : "종점";
+    return placeholder;
+  }
+
   const btn = document.createElement("button");
   btn.type = "button";
-  btn.className = "neighbor-link";
-  btn.textContent = neighbor.name;
-  btn.addEventListener("click", () => setState({ selectedStationId: neighbor.stationId }));
+  btn.className = `station-nav-btn station-nav-${direction}`;
+  btn.title = `${neighbor.name}으로 이동`;
+  btn.addEventListener("click", () =>
+    setState({
+      selectedStationId: neighbor.stationId,
+      selectedLineId: null,
+      detailView: { type: "station", id: neighbor.stationId },
+    })
+  );
+
+  const arrow = document.createElement("span");
+  arrow.className = "station-nav-arrow";
+  arrow.textContent = isPrev ? "◀" : "▶";
+  arrow.setAttribute("aria-hidden", "true");
+
+  const info = document.createElement("span");
+  info.className = "station-nav-info";
+  const name = document.createElement("span");
+  name.className = "station-nav-name";
+  name.textContent = neighbor.name;
+  info.appendChild(name);
+  if (neighbor.distanceKm != null) {
+    const km = document.createElement("span");
+    km.className = "station-nav-km";
+    km.textContent = `${formatKm(neighbor.distanceKm)}km`;
+    info.appendChild(km);
+  }
+
+  if (isPrev) {
+    btn.appendChild(arrow);
+    btn.appendChild(info);
+  } else {
+    btn.appendChild(info);
+    btn.appendChild(arrow);
+  }
   return btn;
 }
 
-function buildDistance(km) {
-  const span = document.createElement("span");
-  span.className = "line-card-distance";
-  span.textContent = km != null ? `${formatKm(km)}km` : "-";
-  return span;
+/** F4(노선 상세): 노선 개요 + 순서대로 나열한 전체 역 목록. */
+function renderLineDetail(detail) {
+  content.innerHTML = "";
+  content.appendChild(buildLineHeader(detail));
+  content.appendChild(buildLineStationList(detail.stations));
 }
 
-function buildTag(text) {
-  const span = document.createElement("span");
-  span.className = "line-card-tag";
-  span.textContent = `(${text})`;
-  return span;
+function buildLineHeader(detail) {
+  const header = document.createElement("div");
+  header.className = "detail-header";
+
+  const title = document.createElement("h2");
+  title.textContent = detail.segmentLabel ? `${detail.name} (${detail.segmentLabel})` : detail.name;
+  if (detail.status && detail.status !== "OPERATING") {
+    const badge = document.createElement("span");
+    badge.className = "line-status-badge";
+    badge.textContent = LINE_STATUS_LABELS[detail.status] || detail.status;
+    title.appendChild(badge);
+  }
+  header.appendChild(title);
+
+  const meta = document.createElement("div");
+  meta.className = "detail-meta";
+  const parts = [];
+  if (detail.regionNames && detail.regionNames.length > 0) {
+    parts.push(detail.regionNames.join(", "));
+  }
+  if (detail.totalDistanceKm != null) {
+    parts.push(`총 ${formatKm(detail.totalDistanceKm)}km`);
+  }
+  parts.push(`${detail.stations.length}개 역`);
+  meta.textContent = parts.join(" · ");
+  header.appendChild(meta);
+
+  return header;
+}
+
+function buildLineStationList(stations) {
+  const list = document.createElement("ol");
+  list.className = "line-detail-station-list";
+  stations.forEach((station) => list.appendChild(buildLineStationItem(station)));
+  return list;
+}
+
+function buildLineStationItem(station) {
+  const li = document.createElement("li");
+  li.className = "line-detail-station-item" + (station.isTransfer ? " line-detail-station-transfer" : "");
+
+  const btn = document.createElement("button");
+  btn.type = "button";
+  btn.className = "line-detail-station-link";
+  btn.textContent = station.name;
+  btn.addEventListener("click", () =>
+    setState({
+      selectedStationId: station.stationId,
+      selectedLineId: null,
+      detailView: { type: "station", id: station.stationId },
+    })
+  );
+  li.appendChild(btn);
+
+  const km = document.createElement("span");
+  km.className = "line-card-distance";
+  km.textContent = station.cumulativeKm != null ? `${formatKm(station.cumulativeKm)}km` : "-";
+  li.appendChild(km);
+
+  return li;
+}
+
+/** 여러 노선이 겹치는 구간을 클릭했을 때: 어느 노선을 볼지 고르는 목록. */
+function renderSegmentChooser(segmentLines) {
+  content.innerHTML = "";
+
+  const header = document.createElement("div");
+  header.className = "detail-header";
+  const title = document.createElement("h2");
+  title.textContent = "이 구간을 지나는 노선";
+  header.appendChild(title);
+  const meta = document.createElement("div");
+  meta.className = "detail-meta";
+  meta.textContent = "노선을 선택하면 해당 노선의 경로와 상세 정보를 보여줍니다.";
+  header.appendChild(meta);
+  content.appendChild(header);
+
+  const list = document.createElement("ul");
+  list.className = "segment-chooser-list";
+  segmentLines.forEach((line) => {
+    const li = document.createElement("li");
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "segment-chooser-item";
+    btn.textContent = line.name;
+    btn.addEventListener("click", () =>
+      setState({
+        selectedLineId: line.lineId,
+        selectedStationId: null,
+        detailView: { type: "line", id: line.lineId },
+      })
+    );
+    li.appendChild(btn);
+    list.appendChild(li);
+  });
+  content.appendChild(list);
 }
 
 function formatKm(km) {

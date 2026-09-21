@@ -5,7 +5,10 @@ const state = {
   searchQuery: "",
   selectedStationId: null,
   selectedLineId: null,
+  // 상세 패널에 무엇을 보여줄지: null | {type:"station", id} | {type:"line", id} | {type:"segment", segmentLines}
+  detailView: null,
   sidebarOpen: false,
+  searchOpen: false,
   legendOpen: false,
 };
 

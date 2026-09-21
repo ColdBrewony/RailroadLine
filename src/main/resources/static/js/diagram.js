@@ -13,13 +13,22 @@ const VIEW_H = 1000;
 const FIT_PADDING = 40;
 const TRANSFER_RADIUS = 7;
 const NORMAL_RADIUS = 4;
-const MIN_SCALE = 0.4;
+// scale=1은 이미 전체 노선망이 화면에 꽉 차는 배율(baseScale)이라, 이보다 더 축소하면
+// 빈 여백만 늘어나고 아무 의미가 없다. 그래서 MIN_SCALE을 1로 둬서 "전체 보기"보다
+// 더 축소되지 않게 막는다.
+const MIN_SCALE = 1;
 // 이제 역을 실제 좌표에 그대로 배치하고(디클러터링 없음) 지도 전체 범위를 기준으로 축척을
 // 잡기 때문에, 서울처럼 역이 촘촘한 구간은 아주 깊이 확대해야 점들이 서로 떨어져 보인다.
-const MAX_SCALE = 80;
+const MAX_SCALE = 120;
 const FOCUS_SCALE = 15;
-const LABEL_SCALE_THRESHOLD = 2.2;
+// 라벨을 확대 단계별로 점진적으로 보여준다: 조금만 확대하면 환승·분기역 이름만,
+// 많이 확대해야 모든 역 이름이 나온다.
+const LABEL_TRANSFER_THRESHOLD = 3;
+const LABEL_ALL_THRESHOLD = 10;
 const WHEEL_ZOOM_FACTOR = 1.2;
+// 화면 픽셀 기준 폭(vector-effect: non-scaling-stroke와 함께 써서 줌 배율과 무관하게 유지).
+// 실제로 보이는 선(2px)보다 훨씬 넓게 잡아 얇은 선도 쉽게 클릭할 수 있게 한다.
+const LINE_HIT_WIDTH_PX = 14;
 
 const svg = document.getElementById("diagram-svg");
 const resetViewBtn = document.getElementById("reset-view");
@@ -40,6 +49,11 @@ let stationNodeEls = new Map(); // stationId -> <g> element
 let lineIndex = new Map(); // lineId -> 원래 노선 경로(선택할 때만 표시)
 let networkGroup = null;
 let selectedLinePath = null; // 기본 구간 위에 표시하는 단 하나의 선택 경로
+// 클릭 대상 판별을 개별 엘리먼트의 click 리스너에 맡기지 않고(포인터 캡처가 걸린 상태에서
+// 크로미움 계열이 click의 target을 캡처 대상으로 재지정해버려 하위 엘리먼트 리스너가 아예
+// 호출되지 않는 문제가 있었다), svg 하나에서 좌표 기준 히트테스트로 위임 처리한다.
+// path -> {shared, firstLineId, segmentLines} 매핑.
+let segmentInfoByPath = new WeakMap();
 
 let outlineRings = null; // [[ [x,y], ... ], ...] (역 좌표와 동일한 투영 좌표계)
 let outlineGroup = null; // renderMap()이 content를 비울 때마다 다시 맨 앞에 붙이는 배경 레이어
@@ -50,7 +64,12 @@ let stationCircleEls = []; // [{circle, isTransfer}]
 let lastSizedScale = null;
 const NORMAL_RADIUS_PX = 4;
 const TRANSFER_RADIUS_PX = 7;
-const LABEL_FONT_PX = 11;
+// 실제로 보이는 점보다 훨씬 넓은(반경 3배) 투명한 히트 영역을 그 뒤에 깔아서,
+// 점 크기가 화면에서 작아도 주변을 클릭하면 그 역으로 잡히게 한다.
+const NORMAL_HIT_RADIUS_PX = 12;
+const TRANSFER_HIT_RADIUS_PX = 16;
+// 화면 픽셀 기준 라벨 글자 크기(줌과 무관하게 고정). 이전 11px은 읽기엔 너무 작았다.
+const LABEL_FONT_PX = 14;
 const MIN_CONTENT_RADIUS = 0.15;
 const MAX_CONTENT_RADIUS = 24;
 const MIN_CONTENT_FONT = 0.4;
@@ -63,7 +82,7 @@ applyTransform();
 renderPlaceholder("불러오는 중...");
 setupPanZoom();
 resetViewBtn.addEventListener("click", () => {
-  setState({ selectedStationId: null, selectedLineId: null });
+  setState({ selectedStationId: null, selectedLineId: null, detailView: null });
   resetView();
 });
 
@@ -161,6 +180,7 @@ function renderMap() {
   stationNodeEls = new Map();
   networkGroup = null;
   selectedLinePath = null;
+  segmentInfoByPath = new WeakMap();
   lastSizedScale = null; // 새로 그린 원/글자 엘리먼트는 아직 화면 픽셀 크기를 못 받았으니 강제로 재계산
 
   if (outlineGroup) {
@@ -192,8 +212,12 @@ function renderMap() {
   segments.forEach(({ from, to, lines }) => {
     const shared = lines.size > 1;
     const firstLine = lines.values().next().value;
+    const points = `${from.x},${from.y} ${to.x},${to.y}`;
+    const titleText = [...lines.values()].map(lineDisplayName).join(" · ")
+      + (shared ? " — 클릭하면 노선을 골라 경로를 확인할 수 있습니다" : "");
+
     const path = document.createElementNS(SVG_NS, "polyline");
-    path.setAttribute("points", `${from.x},${from.y} ${to.x},${to.y}`);
+    path.setAttribute("points", points);
     path.setAttribute("fill", "none");
     path.setAttribute("stroke", "#87939f");
     path.setAttribute("stroke-width", 2);
@@ -202,18 +226,29 @@ function renderMap() {
     path.setAttribute("class", "diagram-line-path" + (shared ? " diagram-line-shared" : ""));
 
     const title = document.createElementNS(SVG_NS, "title");
-    title.textContent = [...lines.values()].map(lineDisplayName).join(" · ")
-      + (shared ? " — 노선 목록에서 선택해 경로를 확인하세요" : "");
+    title.textContent = titleText;
     path.appendChild(title);
-
-    if (!shared) {
-      path.addEventListener("click", (event) => {
-        event.stopPropagation();
-        const isActive = getState().selectedLineId === firstLine.lineId;
-        setState({ selectedLineId: isActive ? null : firstLine.lineId });
-      });
-    }
     networkGroup.appendChild(path);
+
+    // 실제 선은 2px로 얇아서 정확히 맞히기 어려우니, 눈에 보이지 않는 훨씬 넓은
+    // 히트 영역을 그 위에 겹쳐 그려서 그 안쪽 어디를 클릭해도 이 구간으로 잡히게 한다.
+    const hitPath = document.createElementNS(SVG_NS, "polyline");
+    hitPath.setAttribute("points", points);
+    hitPath.setAttribute("fill", "none");
+    hitPath.setAttribute("stroke", "transparent");
+    hitPath.setAttribute("stroke-width", LINE_HIT_WIDTH_PX);
+    hitPath.setAttribute("stroke-linecap", "round");
+    hitPath.setAttribute("class", "diagram-line-hit-area");
+    const hitTitle = document.createElementNS(SVG_NS, "title");
+    hitTitle.textContent = titleText;
+    hitPath.appendChild(hitTitle);
+    networkGroup.appendChild(hitPath);
+
+    segmentInfoByPath.set(hitPath, {
+      shared,
+      firstLineId: firstLine.lineId,
+      segmentLines: [...lines.values()].map((l) => ({ lineId: l.lineId, name: lineDisplayName(l) })),
+    });
   });
   content.appendChild(networkGroup);
 
@@ -224,10 +259,6 @@ function renderMap() {
   selectedLinePath.setAttribute("stroke-linecap", "round");
   selectedLinePath.setAttribute("stroke-linejoin", "round");
   selectedLinePath.style.display = "none";
-  selectedLinePath.addEventListener("click", (event) => {
-    event.stopPropagation();
-    setState({ selectedLineId: null });
-  });
   content.appendChild(selectedLinePath);
 
   const stationsGroup = document.createElementNS(SVG_NS, "g");
@@ -239,7 +270,8 @@ function renderMap() {
     stationsGroup.appendChild(group);
     stationNodeEls.set(st.stationId, group);
     stationCircleEls.push({
-      circle: group.querySelector("circle"),
+      circle: group.querySelector(".diagram-station-circle"),
+      hitCircle: group.querySelector(".diagram-station-hit"),
       label: group.querySelector(".diagram-station-label"),
       isTransfer,
     });
@@ -252,10 +284,20 @@ function buildStationNode(st, isTransfer) {
   group.setAttribute("class", "diagram-station" + (isTransfer ? " diagram-station-transfer" : ""));
   group.setAttribute("transform", `translate(${st.x} ${st.y})`);
   group.classList.toggle("diagram-station-estimated", !st.coordinateVerified);
+  group.dataset.stationId = String(st.stationId);
 
   const color = "#87939f";
 
+  // 실제 점(NORMAL_RADIUS_PX/TRANSFER_RADIUS_PX)보다 훨씬 넓은 투명 히트 영역을 뒤에 깔아서
+  // 점이 작아도 그 주변을 클릭하면 이 역으로 잡히게 한다. updateStationVisualSizes()가
+  // 줌 배율에 맞춰 매번 같이 다시 계산한다.
+  const hitCircle = document.createElementNS(SVG_NS, "circle");
+  hitCircle.setAttribute("class", "diagram-station-hit");
+  hitCircle.setAttribute("fill", "transparent");
+  group.appendChild(hitCircle);
+
   const circle = document.createElementNS(SVG_NS, "circle");
+  circle.setAttribute("class", "diagram-station-circle");
   circle.setAttribute("r", isTransfer ? TRANSFER_RADIUS : NORMAL_RADIUS);
   circle.setAttribute("fill", isTransfer ? "#ffffff" : color);
   circle.setAttribute("stroke", isTransfer ? "#333333" : color);
@@ -272,11 +314,6 @@ function buildStationNode(st, isTransfer) {
   label.setAttribute("y", -12);
   label.setAttribute("text-anchor", "middle");
   group.appendChild(label);
-
-  group.addEventListener("click", (event) => {
-    event.stopPropagation();
-    setState({ selectedStationId: st.stationId });
-  });
 
   return group;
 }
@@ -304,7 +341,7 @@ function highlightSelectedLine(lineId) {
   }
   stationNodeEls.forEach((group, id) => {
     const st = stationIndex.get(id);
-    const circle = group.querySelector("circle");
+    const circle = group.querySelector(".diagram-station-circle");
     const onLine = line && st?.lineIds.has(lineId);
     const color = onLine ? line.color : "#87939f";
     circle.setAttribute("stroke", color);
@@ -397,7 +434,8 @@ function applyTransform(animate) {
     "transform",
     `translate(${transform.tx} ${transform.ty}) scale(${s}) translate(${-dataCenterX} ${-dataCenterY})`
   );
-  content.classList.toggle("show-labels", transform.scale > LABEL_SCALE_THRESHOLD);
+  content.classList.toggle("show-transfer-labels", transform.scale > LABEL_TRANSFER_THRESHOLD);
+  content.classList.toggle("show-all-labels", transform.scale > LABEL_ALL_THRESHOLD);
   updateStationVisualSizes(s);
   if (animate) {
     window.setTimeout(() => content.classList.remove("diagram-animate"), 450);
@@ -418,10 +456,15 @@ function updateStationVisualSizes(s) {
   const scale = Math.max(1e-6, s);
   const normalR = clamp(NORMAL_RADIUS_PX / scale, MIN_CONTENT_RADIUS, MAX_CONTENT_RADIUS);
   const transferR = clamp(TRANSFER_RADIUS_PX / scale, MIN_CONTENT_RADIUS * 1.5, MAX_CONTENT_RADIUS * 1.5);
+  const normalHitR = clamp(NORMAL_HIT_RADIUS_PX / scale, MIN_CONTENT_RADIUS, MAX_CONTENT_RADIUS * 3);
+  const transferHitR = clamp(TRANSFER_HIT_RADIUS_PX / scale, MIN_CONTENT_RADIUS * 1.5, MAX_CONTENT_RADIUS * 3);
   const fontSize = clamp(LABEL_FONT_PX / scale, MIN_CONTENT_FONT, MAX_CONTENT_FONT);
   const labelOffset = -normalR * 3;
-  stationCircleEls.forEach(({circle, label, isTransfer}) => {
+  stationCircleEls.forEach(({circle, hitCircle, label, isTransfer}) => {
     circle.setAttribute("r", isTransfer ? transferR : normalR);
+    if (hitCircle) {
+      hitCircle.setAttribute("r", isTransfer ? transferHitR : normalHitR);
+    }
     if (label) {
       label.style.fontSize = `${fontSize}px`;
       label.setAttribute("y", labelOffset);
@@ -431,6 +474,59 @@ function updateStationVisualSizes(s) {
 
 function clamp(value, min, max) {
   return Math.min(max, Math.max(min, value));
+}
+
+/** 클릭 좌표에서 실제로 맞은(topmost) 엘리먼트를 보고 역/노선/구간/배경 중 무엇인지 분기한다. */
+function handleMapClick(hit) {
+  if (!hit) {
+    return;
+  }
+  const stationGroup = hit.closest(".diagram-station");
+  if (stationGroup) {
+    const stationId = Number(stationGroup.dataset.stationId);
+    // 역을 고르면 이전에 강조돼 있던 노선은 해제하고 그 역 하나만 보여준다.
+    setState({ selectedStationId: stationId, selectedLineId: null, detailView: { type: "station", id: stationId } });
+    return;
+  }
+
+  if (hit === selectedLinePath) {
+    // 강조 표시 중인 경로 자체를 다시 클릭하면 해제한다.
+    const state = getState();
+    const closingShownLine = state.detailView?.type === "line" && state.detailView.id === state.selectedLineId;
+    setState({ selectedLineId: null, detailView: closingShownLine ? null : state.detailView });
+    return;
+  }
+
+  const linePath = hit.closest(".diagram-line-hit-area");
+  const info = linePath && segmentInfoByPath.get(linePath);
+  if (info) {
+    if (info.shared) {
+      // 여러 노선이 겹치는 구간은 어떤 노선을 강조할지 정할 수 없으니, 후보 노선
+      // 목록을 상세 패널에 보여주고 그중 하나를 고르면 그때 강조/상세를 연다.
+      setState({ detailView: { type: "segment", segmentLines: info.segmentLines } });
+      return;
+    }
+    const state = getState();
+    const isActive = state.selectedLineId === info.firstLineId;
+    if (isActive) {
+      const closingShownLine = state.detailView?.type === "line" && state.detailView.id === info.firstLineId;
+      setState({ selectedLineId: null, detailView: closingShownLine ? null : state.detailView });
+    } else {
+      // 노선을 고르면 이전에 선택돼 있던 역 정보는 지우고 이 노선만 보여준다.
+      setState({
+        selectedLineId: info.firstLineId,
+        selectedStationId: null,
+        detailView: { type: "line", id: info.firstLineId },
+      });
+    }
+    return;
+  }
+
+  // 그 외(빈 배경, 배경 지도 윤곽선)는 선택된 역만 해제한다(노선 강조는 유지).
+  // 상세 패널이 노선을 보여주는 중이면 그대로 두고, 역/구간 선택 패널만 닫는다.
+  const state = getState();
+  const keepDetail = state.detailView?.type === "line";
+  setState({ selectedStationId: null, detailView: keepDetail ? state.detailView : null });
 }
 
 function setupPanZoom() {
@@ -461,19 +557,27 @@ function setupPanZoom() {
     applyTransform();
   });
 
-  const endDrag = () => {
+  // 포인터 캡처를 잡은 채로 click이 발생하면(크로미움 계열) 클릭 대상이 svg 자신으로
+  // 재지정되어 역/노선에 붙인 클릭 리스너가 아예 호출되지 않는다. click 이벤트가 뜨기
+  // 전인 pointerup/pointercancel 시점에 캡처를 풀어 실제 클릭 대상이 원래 대로 잡히게 한다.
+  const endDrag = (event) => {
     dragStart = null;
+    if (svg.hasPointerCapture(event.pointerId)) {
+      svg.releasePointerCapture(event.pointerId);
+    }
   };
   svg.addEventListener("pointerup", endDrag);
   svg.addEventListener("pointercancel", endDrag);
 
-  // 드래그 없이 빈 배경(또는 배경 지도)을 클릭하면 선택된 역만 해제한다(노선 강조는 유지).
+  // 역/노선 클릭은 여기 한 곳에서만 처리한다. event.target으로 판별하면, 포인터 캡처가
+  // 걸린 채로 click이 발생할 때(크로미움 계열) 대상이 svg 자신으로 재지정돼 하위 엘리먼트를
+  // 못 찾는 문제가 있어서, 클릭 좌표로 직접 다시 히트테스트(elementFromPoint)한다.
   svg.addEventListener("click", (event) => {
-    const isBackground = event.target === svg || event.target.classList.contains("map-outline-ring");
-    if (dragMoved || !isBackground) {
+    if (dragMoved) {
       return;
     }
-    setState({ selectedStationId: null });
+    const hit = document.elementFromPoint(event.clientX, event.clientY);
+    handleMapClick(hit);
   });
 
   svg.addEventListener(

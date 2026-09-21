@@ -1,18 +1,36 @@
 // F2(역 검색): docs/06-search-ui.md 2장 — 디바운스 입력, 자동완성 드롭다운,
 // 키보드 내비게이션(↑/↓/Enter/Esc), 결과 없음/에러 처리.
+// 검색창은 기본적으로 숨겨져 있고, 헤더의 검색 버튼을 눌러야 열린다.
 import { searchStations } from "./api.js";
-import { setState } from "./state.js";
+import { getState, setState, subscribe } from "./state.js";
 
 const DEBOUNCE_MS = 200;
 const RESULT_LIMIT = 10;
 const BADGE_LIMIT = 3;
 
+const searchToggle = document.getElementById("search-toggle");
+const searchBox = document.getElementById("search-box");
 const input = document.getElementById("search-input");
 const resultsList = document.getElementById("search-results");
 
 let debounceTimer = null;
 let currentResults = [];
 let activeIndex = -1;
+
+searchToggle.addEventListener("click", (event) => {
+  event.stopPropagation();
+  setState({ searchOpen: !getState().searchOpen });
+});
+
+subscribe((state) => {
+  searchBox.hidden = !state.searchOpen;
+  if (state.searchOpen) {
+    input.focus();
+  } else if (input.value) {
+    input.value = "";
+    closeResults();
+  }
+});
 
 input.addEventListener("input", () => {
   const query = input.value.trim();
@@ -40,14 +58,15 @@ input.addEventListener("keydown", (event) => {
       selectStation(currentResults[activeIndex]);
     }
   } else if (event.key === "Escape") {
-    closeResults();
+    setState({ searchOpen: false });
   }
 });
 
 document.addEventListener("click", (event) => {
-  if (!event.target.closest("#search-box")) {
-    closeResults();
+  if (event.target.closest("#search-box") || event.target.closest("#search-toggle")) {
+    return;
   }
+  setState({ searchOpen: false });
 });
 
 async function runSearch(query) {
@@ -143,9 +162,12 @@ function setActive(index) {
 }
 
 function selectStation(item) {
-  setState({ selectedStationId: item.stationId });
-  input.value = item.name;
-  closeResults();
+  setState({
+    selectedStationId: item.stationId,
+    selectedLineId: null,
+    detailView: { type: "station", id: item.stationId },
+    searchOpen: false,
+  });
 }
 
 function closeResults() {
