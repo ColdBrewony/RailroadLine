@@ -4,12 +4,13 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>철도 노선도</title>
-  <link rel="stylesheet" href="/css/style.css?v=20260921-network" />
+  <link rel="stylesheet" href="/css/style.css?v=20260921-detail6" />
 </head>
 <body>
   <header id="search-bar">
     <button id="menu-toggle" type="button" aria-label="노선 목록 열기">☰</button>
-    <div id="search-box">
+    <h1 id="app-title">철도 노선도</h1>
+    <div id="search-box" hidden>
       <input
         id="search-input"
         type="text"
@@ -19,6 +20,7 @@
       />
       <ul id="search-results" role="listbox" hidden></ul>
     </div>
+    <button id="search-toggle" type="button" aria-label="역 이름 검색">🔍</button>
   </header>
 
   <div id="layout">
@@ -42,10 +44,10 @@
           <li>≈ / 점선 테두리: 위치 미확인·추정 배치</li>
         </ul>
         <p class="legend-note">
-          기본 지도는 회색 연결망으로 표시하며 공유 구간은 한 번만 그립니다. 노선 목록에서 선택하면
-          해당 노선의 전체 경로가 고유 색으로 나타납니다. 다시 선택하거나 '전체 보기'를 누르면 해제됩니다.
-          역 종류(관리역·무인역 등)와 KTX 정차 여부는
-          역을 클릭하면 오른쪽(모바일은 하단) 상세 패널에서 확인할 수 있습니다.
+          기본 지도는 회색 연결망으로 표시하며 공유 구간은 한 번만 그립니다. 노선 목록에서 선택하거나
+          지도에서 노선의 선을 클릭하면 해당 노선의 전체 경로가 고유 색으로 나타나고 오른쪽(모바일은
+          하단) 패널에 역 목록·거리가 표시됩니다. 다시 선택하거나 '전체 보기'를 누르면 해제됩니다.
+          역을 클릭하면 같은 패널에서 소속 노선·이전/다음역·구간거리·KTX 정차 여부를 확인할 수 있습니다.
         </p>
       </div>
     </main>
@@ -57,6 +59,6 @@
     </aside>
   </div>
 
-  <script type="module" src="/js/main.js?v=20260921-network"></script>
+  <script type="module" src="/js/main.js?v=20260921-detail6"></script>
 </body>
 </html>
