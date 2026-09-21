@@ -43,3 +43,8 @@ export function getLines(query = "", includeAll = false) {
 export function getLineDetail(lineId) {
   return apiGet(`/lines/${lineId}`);
 }
+
+/** F1: 전체 노선도(정상 운행 중인 모든 노선 + 배치 좌표 + 환승역 id 목록). */
+export function getDiagram() {
+  return apiGet(`/diagram`);
+}

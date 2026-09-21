@@ -93,7 +93,8 @@ function buildLineItem(line, active) {
   li.appendChild(distance);
 
   li.addEventListener("click", () => {
-    setState({ selectedLineId: line.lineId, sidebarOpen: false });
+    const isActive = getState().selectedLineId === line.lineId;
+    setState({ selectedLineId: isActive ? null : line.lineId, sidebarOpen: false });
   });
 
   return li;
