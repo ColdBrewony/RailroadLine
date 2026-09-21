@@ -52,7 +52,8 @@ public class LineService {
                 line.getSegmentLabel(),
                 line.getStatus(),
                 line.getTotalDistanceKmOfficial(),
-                stationCount);
+                stationCount,
+                parseRegionNames(line));
     }
 
     private LineDetail toDetail(Line line) {
@@ -67,17 +68,20 @@ public class LineService {
                         lineStationRepository.countByStation_Id(ls.getStation().getId()) > 1))
                 .toList();
 
-        List<String> regionNames = line.getRegionNames() == null || line.getRegionNames().isBlank()
-                ? List.of()
-                : Arrays.asList(line.getRegionNames().split(","));
-
         return new LineDetail(
                 line.getId(),
                 line.getName(),
                 line.getSegmentLabel(),
                 line.getStatus(),
-                regionNames,
+                parseRegionNames(line),
                 line.getTotalDistanceKmOfficial(),
                 items);
+    }
+
+    /** 노선이 지나는 관할 본부 이름들(콤마로 이어붙여 저장돼 있음)을 목록으로 풀어낸다. */
+    private List<String> parseRegionNames(Line line) {
+        return line.getRegionNames() == null || line.getRegionNames().isBlank()
+                ? List.of()
+                : Arrays.asList(line.getRegionNames().split(","));
     }
 }

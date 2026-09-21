@@ -75,10 +75,21 @@ function buildLineItem(line, active) {
   const li = document.createElement("li");
   li.className = "line-list-item" + (active ? " active" : "");
 
+  const main = document.createElement("div");
+  main.className = "line-list-main";
+
   const name = document.createElement("span");
   name.className = "line-list-name";
   name.textContent = line.segmentLabel ? `${line.name} (${line.segmentLabel})` : line.name;
-  li.appendChild(name);
+  main.appendChild(name);
+
+  if (line.regionNames && line.regionNames.length > 0) {
+    const region = document.createElement("span");
+    region.className = "line-list-region";
+    region.textContent = line.regionNames.join(", ");
+    main.appendChild(region);
+  }
+  li.appendChild(main);
 
   if (line.status && line.status !== "OPERATING") {
     const badge = document.createElement("span");
