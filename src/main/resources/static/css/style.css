@@ -219,7 +219,14 @@ body {
   position: relative;
   flex: 1 1 auto;
   min-width: 0;
-  background: var(--color-bg);
+  background: #dcebf5; /* 바다처럼 보이도록 옅은 파란색 — 그 위에 국토 윤곽선(육지)을 얹는다 */
+}
+
+.map-outline-ring {
+  fill: #eef2e4;
+  stroke: #c9d3bb;
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
 }
 
 #diagram-svg {

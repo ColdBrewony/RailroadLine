@@ -39,6 +39,17 @@ public class GeoAnchorCalculator {
     private static final Path COORDINATES_FILE = Path.of("data", "raw", "station-coordinates.csv");
     private static final double CANVAS_MARGIN_RATIO = 0.08;
 
+    /**
+     * 대한민국(본토+제주, 울릉도/독도 제외) 전체를 담는 고정 위경도 범위. 역 좌표 투영뿐 아니라
+     * frontend가 배경으로 까는 국토 윤곽선(static/data/korea-outline.json)도 반드시 이 값과
+     * 똑같은 범위·공식으로 미리 투영해 뒀다 — 그래야 역 점과 배경 윤곽선이 같은 좌표계에서 정렬된다.
+     * 값을 바꾸면 그 윤곽선도 다시 생성해야 한다(스크립트: 이 클래스의 커밋 로그 참고).
+     */
+    static final double LAT_MIN = 33.0;
+    static final double LAT_MAX = 38.65;
+    static final double LNG_MIN = 124.5;
+    static final double LNG_MAX = 129.6;
+
     /** 대한민국 대략 중심(위경도 전부 못 구한 극단적인 경우의 최후 기본값). */
     private static final double DEFAULT_LAT = 36.5;
     private static final double DEFAULT_LNG = 127.8;
@@ -114,12 +125,21 @@ public class GeoAnchorCalculator {
                 continue; // 지역 정보조차 없는 노선(사실상 없음): 기본값에 맡긴다.
             }
 
+            // 닻이 하나뿐인 노선은 보간할 게 없어 모든 역이 정확히 같은 점에 겹친다.
+            // "정확한 좌표"라는 원칙은 지키되, 완전히 안 보이게 겹치지는 않도록 노선 순서에 따라
+            // 아주 작게(약 수십~수백 m) 나선형으로 흩어 최소한의 시인성만 확보한다.
+            boolean singleAnchor = anchorPos.size() == 1;
             for (int i = 0; i < ordered.size(); i++) {
                 Integer idx = indexOf.get(ordered.get(i).getStation().getId());
                 if (idx == null) {
                     continue;
                 }
                 double[] latLng = interpolate(i, anchorPos, anchorLatLng);
+                if (singleAnchor) {
+                    double angle = i * 2.4;
+                    double radiusDeg = 0.002 * i;
+                    latLng = new double[] {latLng[0] + radiusDeg * Math.sin(angle), latLng[1] + radiusDeg * Math.cos(angle)};
+                }
                 sumLat[idx] += latLng[0];
                 sumLng[idx] += latLng[1];
                 count[idx]++;
@@ -141,41 +161,33 @@ public class GeoAnchorCalculator {
         return projectToCanvas(lat, lng, n);
     }
 
-    /** 위경도를 평면(x=경도, y=-위도, 위도에 따른 경도 간격 보정 포함)에 투영하고, 캔버스 크기로 정규화한다. */
+    /**
+     * 위경도를 평면에 투영한다. {@link #LAT_MIN}~{@link #LNG_MAX}로 정의된 고정 범위를 기준으로
+     * 삼고(역 데이터가 아니라!), 경도 1도의 실제 거리가 위도 1도보다 짧다는 점(위도에 따른 보정,
+     * cos)을 반영한 뒤 x/y에 같은 배율을 적용해서(따로따로 늘리지 않음) 실제 한국 지형의 가로세로
+     * 비율이 그대로 유지되게 한다. 배경 윤곽선(static/data/korea-outline.json)도 똑같은 공식으로
+     * 미리 투영해 뒀으므로, 이 메서드가 만든 좌표는 그 위에 그대로 겹쳐 그릴 수 있다.
+     */
     private double[][] projectToCanvas(double[] lat, double[] lng, int n) {
-        double meanLat = 0;
-        for (double v : lat) {
-            meanLat += v;
-        }
-        meanLat = (n > 0) ? meanLat / n : DEFAULT_LAT;
+        double meanLat = (LAT_MIN + LAT_MAX) / 2;
         double lngScale = Math.cos(Math.toRadians(meanLat));
 
-        double[] px = new double[n];
-        double[] py = new double[n];
-        double minX = Double.MAX_VALUE;
-        double maxX = -Double.MAX_VALUE;
-        double minY = Double.MAX_VALUE;
-        double maxY = -Double.MAX_VALUE;
-        for (int i = 0; i < n; i++) {
-            px[i] = lng[i] * lngScale;
-            py[i] = -lat[i];
-            minX = Math.min(minX, px[i]);
-            maxX = Math.max(maxX, px[i]);
-            minY = Math.min(minY, py[i]);
-            maxY = Math.max(maxY, py[i]);
-        }
+        double widthDeg = (LNG_MAX - LNG_MIN) * lngScale;
+        double heightDeg = LAT_MAX - LAT_MIN;
 
-        double rangeX = Math.max(1e-6, maxX - minX);
-        double rangeY = Math.max(1e-6, maxY - minY);
         double margin = DiagramLayoutRunner.AREA_WIDTH * CANVAS_MARGIN_RATIO;
         double targetW = DiagramLayoutRunner.AREA_WIDTH - margin * 2;
         double targetH = DiagramLayoutRunner.AREA_HEIGHT - margin * 2;
 
+        double scale = Math.min(targetW / widthDeg, targetH / heightDeg);
+        double offsetX = margin + (targetW - widthDeg * scale) / 2;
+        double offsetY = margin + (targetH - heightDeg * scale) / 2;
+
         double[] anchorX = new double[n];
         double[] anchorY = new double[n];
         for (int i = 0; i < n; i++) {
-            anchorX[i] = margin + (px[i] - minX) / rangeX * targetW;
-            anchorY[i] = margin + (py[i] - minY) / rangeY * targetH;
+            anchorX[i] = offsetX + (lng[i] - LNG_MIN) * lngScale * scale;
+            anchorY[i] = offsetY + (LAT_MAX - lat[i]) * scale;
         }
         return new double[][] {anchorX, anchorY};
     }

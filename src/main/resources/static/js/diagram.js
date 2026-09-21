@@ -5,6 +5,8 @@
 import { getDiagram } from "./api.js";
 import { getState, setState, subscribe } from "./state.js";
 
+const OUTLINE_URL = "/data/korea-outline.json";
+
 const SVG_NS = "http://www.w3.org/2000/svg";
 const VIEW_W = 1000;
 const VIEW_H = 1000;
@@ -34,6 +36,9 @@ let stationIndex = new Map(); // stationId -> {stationId, name, x, y, lineIds:Se
 let lineColorById = new Map(); // lineId -> color
 let stationNodeEls = new Map(); // stationId -> <g> element
 let linePathEls = new Map(); // lineId -> <polyline> element
+
+let outlineRings = null; // [[ [x,y], ... ], ...] (역 좌표와 동일한 투영 좌표계)
+let outlineGroup = null; // renderMap()이 content를 비울 때마다 다시 맨 앞에 붙이는 배경 레이어
 
 let currentStationId = null;
 let currentLineId = null;
@@ -66,8 +71,13 @@ subscribe((state) => {
 
 async function loadDiagram() {
   try {
-    diagramData = await getDiagram();
+    const [diagram, outline] = await Promise.all([getDiagram(), loadOutline()]);
+    diagramData = diagram;
+    outlineRings = outline;
     buildIndex();
+    if (outlineRings) {
+      outlineGroup = buildOutlineGroup(outlineRings);
+    }
     renderMap();
     computeBaseTransform();
     resetView();
@@ -80,6 +90,33 @@ async function loadDiagram() {
     console.error("[railroad] 전체 노선도 조회 실패:", err);
     renderPlaceholder("노선도를 불러오지 못했습니다. (새로고침하면 재시도합니다)");
   }
+}
+
+/** 배경 지도 윤곽선(정적 자원). 못 불러와도 역/노선 렌더링 자체는 계속되게 실패를 흡수한다. */
+async function loadOutline() {
+  try {
+    const res = await fetch(OUTLINE_URL);
+    if (!res.ok) {
+      return null;
+    }
+    return await res.json();
+  } catch (err) {
+    console.error("[railroad] 배경 지도 윤곽선을 불러오지 못했습니다:", err);
+    return null;
+  }
+}
+
+function buildOutlineGroup(rings) {
+  const group = document.createElementNS(SVG_NS, "g");
+  group.setAttribute("class", "map-outline-group");
+  rings.forEach((ring) => {
+    const points = ring.map(([x, y]) => `${x},${y}`).join(" ");
+    const polygon = document.createElementNS(SVG_NS, "polygon");
+    polygon.setAttribute("points", points);
+    polygon.setAttribute("class", "map-outline-ring");
+    group.appendChild(polygon);
+  });
+  return group;
 }
 
 function buildIndex() {
@@ -106,6 +143,10 @@ function renderMap() {
   content.innerHTML = "";
   stationNodeEls = new Map();
   linePathEls = new Map();
+
+  if (outlineGroup) {
+    content.appendChild(outlineGroup);
+  }
 
   const transferSet = new Set(diagramData.transferStationIds);
 
@@ -229,6 +270,17 @@ function computeBaseTransform() {
     minY = Math.min(minY, st.y);
     maxY = Math.max(maxY, st.y);
   });
+  // 배경 지도(제주 등 역이 없는 지역 포함)도 처음부터 화면 안에 들어오게 범위에 포함시킨다.
+  if (outlineRings) {
+    outlineRings.forEach((ring) => {
+      ring.forEach(([x, y]) => {
+        minX = Math.min(minX, x);
+        maxX = Math.max(maxX, x);
+        minY = Math.min(minY, y);
+        maxY = Math.max(maxY, y);
+      });
+    });
+  }
   if (!Number.isFinite(minX)) {
     minX = maxX = minY = maxY = 0;
   }
@@ -314,9 +366,10 @@ function setupPanZoom() {
   svg.addEventListener("pointerup", endDrag);
   svg.addEventListener("pointercancel", endDrag);
 
-  // 드래그 없이 빈 배경을 클릭하면 선택된 역만 해제한다(노선 강조는 유지).
+  // 드래그 없이 빈 배경(또는 배경 지도)을 클릭하면 선택된 역만 해제한다(노선 강조는 유지).
   svg.addEventListener("click", (event) => {
-    if (dragMoved || event.target !== svg) {
+    const isBackground = event.target === svg || event.target.classList.contains("map-outline-ring");
+    if (dragMoved || !isBackground) {
       return;
     }
     setState({ selectedStationId: null });
