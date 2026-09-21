@@ -31,10 +31,15 @@ import tools.jackson.databind.ObjectMapper;
  * 애플리케이션 시작 시 읽어 DB에 적재한다.
  *
  * <p>작업 디렉터리가 프로젝트 루트({@code data/raw/lines}가 상대경로로 보이는 위치)일 때만 동작한다.
- * 이미 적재된 노선(name+segmentLabel 기준)은 건너뛰어 재시작해도 중복 적재되지 않는다.
+ * 이 앱은 읽기 전용 뷰어라 DB는 JSON/CSV 원본 데이터의 파생 캐시일 뿐이다. 그래서 시작할 때마다
+ * 기존 Line/LineStation/Station을 전부 지우고 파일에서 새로 적재한다 — 예전에는 "이미 적재된
+ * 노선(name+segmentLabel 기준)은 건너뛴다" 방식이었는데, 그러면 역 이름 수정이나 좌표 보충 같은
+ * 원본 데이터 수정 사항이 한 번 만들어진 로컬 H2 DB 파일에는 영원히 반영되지 않는 문제가 있었다
+ * (재시작해도 예전 값 그대로 남음).
  *
  * <p>{@link com.futek.railroad.layout.DiagramLayoutRunner}가 이 시더 다음에 실행되어야 하므로
- * 순서를 명시한다.
+ * 순서를 명시한다. 매번 Station을 새로 만들어 diagramX가 null 상태로 시작하므로, 별도 처리 없이도
+ * DiagramLayoutRunner가 매 시작마다 좌표를 다시 계산한다.
  */
 @Component
 @Order(1)
@@ -73,22 +78,20 @@ public class DataSeeder implements ApplicationRunner {
             files = stream.filter(p -> p.toString().endsWith(".json")).sorted().collect(Collectors.toList());
         }
 
+        lineRepository.deleteAll(); // cascade로 LineStation도 함께 삭제됨
+        stationRepository.deleteAll();
+
         int seeded = 0;
-        int skipped = 0;
         for (Path file : files) {
             LineFileDto dto = objectMapper.readValue(file.toFile(), LineFileDto.class);
             if (dto.lineName == null || dto.stations == null) {
                 log.warn("건너뜀(필수 필드 없음): {}", file.getFileName());
                 continue;
             }
-            if (lineRepository.findByNameAndSegmentLabel(dto.lineName, dto.segmentLabel).isPresent()) {
-                skipped++;
-                continue;
-            }
             seedLine(dto);
             seeded++;
         }
-        log.info("데이터 시딩 완료: 신규 {}개 노선 적재, {}개 노선 이미 존재해 건너뜀", seeded, skipped);
+        log.info("데이터 시딩 완료: {}개 노선 전체 재적재", seeded);
     }
 
     @Transactional

@@ -29,7 +29,7 @@
     { "name": "평화신호장", "cumulativeKm": 152.2, "stationType": "SIGNAL_YARD", "isKtxStop": false, "remarks": null },
     { "name": "순천", "cumulativeKm": 156.5, "stationType": "MANAGED", "isKtxStop": true, "remarks": "전남본부 소재지, 전라선 접속" },
     { "name": "원창", "cumulativeKm": 168.3, "stationType": null, "isKtxStop": false, "remarks": null },
-    { "name": "구룡", "cumulativeKm": 173.0, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "구룡(순천)", "cumulativeKm": 173.0, "stationType": null, "isKtxStop": false, "remarks": "분당선(서울)에도 동명의 역이 있어 위키백과 동음이의 표기를 따라 구분함" },
     { "name": "벌교", "cumulativeKm": 179.9, "stationType": null, "isKtxStop": false, "remarks": null },
     { "name": "조성", "cumulativeKm": 190.6, "stationType": "UNMANNED", "isKtxStop": false, "remarks": null },
     { "name": "예당", "cumulativeKm": 195.9, "stationType": "STAFFED", "isKtxStop": false, "remarks": null },

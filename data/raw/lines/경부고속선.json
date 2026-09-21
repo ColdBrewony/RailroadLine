@@ -14,7 +14,7 @@
     { "name": "김천(구미)", "cumulativeKm": 214.4, "stationType": "MANAGED", "isKtxStop": true, "remarks": "정정: 이전 지도 판독값(233.6)에서 위키백과 기준으로 수정" },
     { "name": "서대구", "cumulativeKm": 261.7, "stationType": "MANAGED", "isKtxStop": true, "remarks": "정정: 이전 279.3에서 수정" },
     { "name": "동대구", "cumulativeKm": 269.1, "stationType": "MANAGED", "isKtxStop": true, "remarks": "정정: 이전 286.7에서 수정" },
-    { "name": "경주", "cumulativeKm": 316.5, "stationType": "MANAGED", "isKtxStop": true, "remarks": null },
+    { "name": "신경주", "cumulativeKm": 316.5, "stationType": "MANAGED", "isKtxStop": true, "remarks": "정정: '경주'로 잘못 기재돼 있었음 - 경부고속선의 동대구~울산 구간 KTX 정차역은 실제로는 경주 구시가지의 경주역(동해선)이 아니라 건천읍에 있는 신경주역임(위키백과로 확인)" },
     { "name": "울산", "cumulativeKm": 346.5, "stationType": "MANAGED", "isKtxStop": true, "remarks": null },
     { "name": "부산", "cumulativeKm": 398.2, "stationType": "MANAGED", "isKtxStop": true, "remarks": "종점, 공식 총거리와 정확히 일치" }
   ],

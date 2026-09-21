@@ -1,13 +1,13 @@
 ﻿{
   "lineName": "경강선",
   "segmentLabel": "판교-여주",
-  "originStation": "판교",
+  "originStation": "판교(성남)",
   "terminusStation": "여주",
   "totalDistanceKmOfficial": 57.0,
   "region": ["수도권서부본부", "수도권동부본부"],
   "source": "ko.wikipedia.org",
   "stations": [
-    { "name": "판교", "cumulativeKm": 0.5, "stationType": null, "isKtxStop": false, "remarks": null },
+    { "name": "판교(성남)", "cumulativeKm": 0.5, "stationType": null, "isKtxStop": false, "remarks": "장항선(서천)에도 동명의 역이 있어 코레일 안내 표기를 따라 구분함" },
     { "name": "성남", "cumulativeKm": 1.2, "stationType": null, "isKtxStop": false, "remarks": null },
     { "name": "이매", "cumulativeKm": 2.0, "stationType": null, "isKtxStop": false, "remarks": null },
     { "name": "삼동", "cumulativeKm": 8.9, "stationType": null, "isKtxStop": false, "remarks": null },
