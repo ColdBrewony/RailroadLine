@@ -29,7 +29,7 @@
     { "name": "대천", "cumulativeKm": 87.6, "stationType": "MANAGED", "isKtxStop": false, "remarks": "신규 확인" },
     { "name": "남포", "cumulativeKm": 90.7, "stationType": null, "isKtxStop": false, "remarks": "신규 확인" },
     { "name": "웅천", "cumulativeKm": 99.7, "stationType": null, "isKtxStop": false, "remarks": "신규 확인" },
-    { "name": "판교", "cumulativeKm": 110.9, "stationType": null, "isKtxStop": false, "remarks": "신규 확인" },
+    { "name": "판교(서천)", "cumulativeKm": 110.9, "stationType": null, "isKtxStop": false, "remarks": "신규 확인. 경강선(성남)에도 동명의 역이 있어 코레일 안내 표기를 따라 구분함" },
     { "name": "서천", "cumulativeKm": 119.5, "stationType": null, "isKtxStop": false, "remarks": "신규 확인" },
     { "name": "장항", "cumulativeKm": 124.3, "stationType": null, "isKtxStop": false, "remarks": "신규 확인" },
     { "name": "군산", "cumulativeKm": 131.3, "stationType": "MANAGED", "isKtxStop": false, "remarks": "신규 확인" },

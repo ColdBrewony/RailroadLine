@@ -144,21 +144,32 @@ public class GeoAnchorCalculator {
                 continue; // 지역 정보조차 없는 노선(사실상 없음): 기본값에 맡긴다.
             }
 
-            // 그래도 닻이 하나뿐이면(지역본부가 1개뿐인 아주 짧은 노선 등) 여전히 모든 역이
-            // 같은 점에 겹친다. "정확한 좌표" 원칙은 지키되 완전히 안 보이게 겹치지는 않도록
-            // 노선 순서에 따라 아주 작게(약 수십~수백 m) 나선형으로 흩어 최소 시인성만 확보한다.
-            boolean singleAnchor = anchorPos.size() == 1;
+            // 지역본부가 1개뿐인 노선(그래서 위 병합 후에도 닻이 여전히 1개)은 아직 보간할
+            // "형태"가 없다. 이때 노선 id로 고정된(재현 가능한, 그러나 노선마다 다른) 두 번째
+            // 가상 지점을 같은 지역 범위 안에 하나 더 만들어 섞는다. 이렇게 하면 (a) 실측 닻이
+            // 하나뿐이라고 노선 전체가 한 점에 뭉치지 않고 순서대로 쭉 이어지는 모양이 나오고,
+            // (b) 같은 지역을 공유하는 서로 다른 노선끼리 완전히 같은 좌표로 겹치지 않는다
+            // (예전엔 지역이 같으면 모든 노선이 "지역 중심점 + index 기반 나선"이라는 같은 공식을
+            // 써서, 일산선·안산선·수인선처럼 노선은 다른데 좌표가 그대로 겹치는 버그가 있었다).
+            if (anchorPos.size() == 1) {
+                double[] box = combinedBounds(regions);
+                java.util.Random rnd = new java.util.Random(line.getId());
+                double[] synthetic = randomPointInBox(box, rnd);
+                int realIdx = anchorPos.get(0);
+                int syntheticIdx = (realIdx < ordered.size() / 2) ? ordered.size() - 1 : 0;
+                if (syntheticIdx != realIdx) {
+                    anchorPos.add(syntheticIdx);
+                    anchorLatLng.add(synthetic);
+                    sortAnchorsByPosition(anchorPos, anchorLatLng);
+                }
+            }
+
             for (int i = 0; i < ordered.size(); i++) {
                 Integer idx = indexOf.get(ordered.get(i).getStation().getId());
                 if (idx == null) {
                     continue;
                 }
                 double[] latLng = interpolate(i, anchorPos, anchorLatLng);
-                if (singleAnchor) {
-                    double angle = i * 2.4;
-                    double radiusDeg = 0.002 * i;
-                    latLng = new double[] {latLng[0] + radiusDeg * Math.sin(angle), latLng[1] + radiusDeg * Math.cos(angle)};
-                }
                 sumLat[idx] += latLng[0];
                 sumLng[idx] += latLng[1];
                 count[idx]++;
@@ -259,6 +270,34 @@ public class GeoAnchorCalculator {
         double[] a = anchorLatLng.get(lo);
         double[] b = anchorLatLng.get(hi);
         return new double[] {a[0] + t * (b[0] - a[0]), a[1] + t * (b[1] - a[1])};
+    }
+
+    /** 노선이 지나는 지역본부들의 범위를 하나로 합친다(없으면 대한민국 전체 범위로 대신한다). */
+    private double[] combinedBounds(List<String> regions) {
+        double latMin = Double.MAX_VALUE;
+        double latMax = -Double.MAX_VALUE;
+        double lngMin = Double.MAX_VALUE;
+        double lngMax = -Double.MAX_VALUE;
+        boolean found = false;
+        for (String region : regions) {
+            double[] b = REGION_BOUNDS.get(region);
+            if (b == null) {
+                continue;
+            }
+            found = true;
+            latMin = Math.min(latMin, b[0]);
+            latMax = Math.max(latMax, b[1]);
+            lngMin = Math.min(lngMin, b[2]);
+            lngMax = Math.max(lngMax, b[3]);
+        }
+        return found ? new double[] {latMin, latMax, lngMin, lngMax} : new double[] {LAT_MIN, LAT_MAX, LNG_MIN, LNG_MAX};
+    }
+
+    /** [latMin,latMax,lngMin,lngMax] 범위 안에서 노선별로 고정된(rnd) 임의의 한 점을 뽑는다. */
+    private double[] randomPointInBox(double[] box, java.util.Random rnd) {
+        double lat = box[0] + rnd.nextDouble() * (box[1] - box[0]);
+        double lng = box[2] + rnd.nextDouble() * (box[3] - box[2]);
+        return new double[] {lat, lng};
     }
 
     /** 실측 닻과 지역본부 "가짜 닻"을 섞은 뒤, interpolate()가 가정하는 대로 위치(index) 오름차순으로 정렬한다. */

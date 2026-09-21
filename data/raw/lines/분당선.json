@@ -15,7 +15,7 @@
     { "name": "선릉", "cumulativeKm": 6.7, "stationType": "STAFFED", "isKtxStop": false, "remarks": null },
     { "name": "한티", "cumulativeKm": 7.7, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
     { "name": "도곡", "cumulativeKm": 8.4, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
-    { "name": "구룡", "cumulativeKm": 9.0, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
+    { "name": "구룡(서울)", "cumulativeKm": 9.0, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": "경전선(순천)에도 동명의 역이 있어 위키백과 동음이의 표기를 따라 구분함" },
     { "name": "개포동", "cumulativeKm": 9.7, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
     { "name": "대모산입구", "cumulativeKm": 10.3, "stationType": "ENTRUSTED", "isKtxStop": false, "remarks": null },
     { "name": "수서", "cumulativeKm": 13.3, "stationType": "MANAGED", "isKtxStop": false, "remarks": null },
