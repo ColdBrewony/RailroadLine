@@ -1,0 +1,21 @@
+.git
+.gitattributes
+.gitignore
+.gradle
+.idea
+.claude
+.vscode
+build/
+out/
+*.iml
+*.log
+
+# Runtime-generated H2 db files (re-seeded from data/raw on every boot)
+data/railroad-db.*
+
+# Not needed inside the image
+docs/
+scripts/
+HELP.md
+README.md
+install.cmd
