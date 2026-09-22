@@ -12,7 +12,7 @@ KORAIL 전국 철도노선도(2026.01.01 기준)를 실제 지리 좌표 위에 
 | 3 | 백엔드 API 개발 | ✅ 완료 (역 검색/상세, 노선 목록/상세, 전체 노선도 API) |
 | 4 | 프론트엔드 노선도 시각화 | ✅ 완료 (전체 노선도 한 화면 통합 표시, pan/zoom, 실측 좌표 기반 배치) |
 | 5 | 검색/상세 정보 UI | ✅ 완료 (역 검색, 역/노선 클릭 시 상세 패널) |
-| 6 | 테스트 및 배포 | 🔶 부분 완료 (단위/회귀 테스트만 있고 배포 환경은 아직 없음) |
+| 6 | 테스트 및 배포 | ✅ 완료 (단위/회귀 테스트, Docker 이미지로 배포 가능) |
 
 ## 프로젝트 구조
 
@@ -34,6 +34,8 @@ railroad/
 ├─ scripts/               # 좌표 감사/배경 지도 생성용 보조 스크립트 (Python)
 ├─ src/main/              # Spring Boot 애플리케이션 소스 + 정적 프론트엔드(static/)
 ├─ src/test/              # 단위/회귀 테스트
+├─ Dockerfile             # 멀티스테이지(Gradle 빌드 → JRE 런타임) 이미지 정의
+├─ docker-compose.yml     # 로컬 Docker 실행용 compose 파일
 └─ build.gradle
 ```
 
@@ -56,13 +58,36 @@ railroad/
 
 ## 빌드 및 실행
 
+기본 포트는 **8090**입니다(`src/main/resources/application.properties`의 `server.port`).
+
 ```bash
 ./gradlew build
-./gradlew bootRun
+./gradlew bootRun   # http://localhost:8090
 ./gradlew test
 ```
+
+애플리케이션은 반드시 프로젝트 루트(=`data/raw`가 상대경로로 보이는 위치)에서 실행해야 합니다.
+`DataSeeder`가 시작할 때마다 `data/raw/lines/*.json`과 좌표 CSV를 다시 읽어 H2 DB를 전부
+재구성하기 때문입니다.
+
+### Docker로 실행
+
+```bash
+docker compose up --build
+```
+
+또는 직접 빌드/실행:
+
+```bash
+docker build -t railroad-line .
+docker run --rm -p 8090:8090 railroad-line
+```
+
+`http://localhost:8090` 에서 접속할 수 있습니다. 이미지에는 `data/raw`(원본 노선/좌표 데이터)가
+함께 포함되며, H2 DB는 매 기동 시 그 원본으로부터 다시 만들어지는 파생 캐시라서 별도의
+영속 볼륨은 두지 않았습니다 — 컨테이너를 새로 띄워도 항상 최신 `data/raw` 내용으로 시작합니다.
 
 ## 다음 단계
 
 - 야음(울산항선)·군산화물선분기(군산화물선) 2개 역은 신뢰할 수 있는 좌표 출처를 아직 찾지 못해 추정 배치 상태입니다.
-- 배포 환경(CI/CD, 운영 DB 등)은 아직 구성하지 않았습니다.
+- CI/CD 파이프라인은 아직 구성하지 않았습니다.

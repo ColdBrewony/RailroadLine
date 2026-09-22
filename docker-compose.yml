@@ -1,0 +1,8 @@
+services:
+  railroad:
+    build: .
+    image: railroad-line:latest
+    container_name: railroad-line
+    ports:
+      - "8090:8090"
+    restart: unless-stopped
