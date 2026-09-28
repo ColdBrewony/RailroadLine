@@ -43,6 +43,7 @@ public class StationDetailService {
                 station.isKtxStop(),
                 station.getDiagramX(),
                 station.getDiagramY(),
+                station.getControlConsole(),
                 lines);
     }
 

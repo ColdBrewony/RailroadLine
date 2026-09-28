@@ -44,6 +44,7 @@
 | diagram_x, diagram_y | Decimal, nullable | 노선도(도식화) 렌더링용 좌표. Phase 4에서 채움 |
 | lat, lng | Decimal, nullable | 참고용 지리 좌표(현재 미수집) |
 | remarks | String, nullable | |
+| control_console | String, nullable | 일반선 관제 콘솔 담당구간(참고용 시드 데이터, `data/raw/console-jurisdiction.json`) 기준 담당 콘솔 코드. 여러 콘솔이 겹치면 콤마로 이어붙임. 원본 표에 없는 노선/역은 null(정보 없음이지 콘솔 없음이 아님) |
 
 > **본부(Region)는 Station에 붙이지 않는다.** 실제로 확보한 데이터는 "이 노선이 어느 본부들을 지나는가"뿐이고, "이 역이 정확히 어느 본부 소속인가"는 확보하지 못했다. 역 단위 본부 정보가 필요해지면 Phase 3 이후 별도 보강 작업으로 진행한다.
 

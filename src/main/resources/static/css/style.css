@@ -519,6 +519,31 @@ body {
   margin-bottom: 16px;
 }
 
+.detail-console-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: #e7f0fb;
+  border: 1px solid #a9c9ec;
+}
+
+.detail-console-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.detail-console-value {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--color-accent);
+}
+
 .detail-loading,
 .detail-error {
   color: var(--color-text-muted);

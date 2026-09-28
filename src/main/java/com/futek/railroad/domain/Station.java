@@ -43,6 +43,14 @@ public class Station {
     @Column(length = 1000)
     private String remarks;
 
+    /**
+     * 일반선 관제 콘솔 담당구간(참고용 시드 데이터, {@code data/raw/console-jurisdiction.json})
+     * 기준으로 이 역을 담당하는 콘솔 코드(예: "CONS-004"). 여러 콘솔이 겹치면 콤마로 이어붙인다.
+     * 원본 문서에 없는 노선/역은 null이며, 이는 "담당 콘솔 없음"이 아니라 "정보 없음"을 뜻한다.
+     */
+    @Column(length = 100)
+    private String controlConsole;
+
     protected Station() {
         // JPA
     }
@@ -117,5 +125,13 @@ public class Station {
 
     public void setRemarks(String remarks) {
         this.remarks = remarks;
+    }
+
+    public String getControlConsole() {
+        return controlConsole;
+    }
+
+    public void setControlConsole(String controlConsole) {
+        this.controlConsole = controlConsole;
     }
 }
