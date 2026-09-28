@@ -13,5 +13,6 @@ public record StationDetail(
         @JsonProperty("isKtxStop") boolean ktxStop,
         BigDecimal diagramX,
         BigDecimal diagramY,
+        String controlConsole,
         List<StationLineInfo> lines) {
 }

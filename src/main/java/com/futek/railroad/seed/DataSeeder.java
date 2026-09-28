@@ -15,6 +15,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.slf4j.Logger;
@@ -47,6 +48,7 @@ public class DataSeeder implements ApplicationRunner {
 
     private static final Logger log = LoggerFactory.getLogger(DataSeeder.class);
     private static final Path LINES_DIR = Paths.get("data", "raw", "lines");
+    private static final Path CONSOLE_JURISDICTION_FILE = Paths.get("data", "raw", "console-jurisdiction.json");
 
     private final LineRepository lineRepository;
     private final StationRepository stationRepository;
@@ -92,6 +94,87 @@ public class DataSeeder implements ApplicationRunner {
             seeded++;
         }
         log.info("데이터 시딩 완료: {}개 노선 전체 재적재", seeded);
+
+        seedConsoleJurisdiction();
+    }
+
+    /**
+     * {@code data/raw/console-jurisdiction.json}(일반선 관제 콘솔별 담당구간, 참고용 시드 데이터)을 읽어
+     * 해당 구간에 속한 역들에 {@link Station#getControlConsole()}을 채운다. 노선/역 목록에 없는
+     * 콘솔·구간은 조용히 건너뛰고 경고만 남긴다 — 이 파일이 없어도 전체 시딩은 정상 동작해야 한다.
+     */
+    private void seedConsoleJurisdiction() throws IOException {
+        if (!Files.isRegularFile(CONSOLE_JURISDICTION_FILE)) {
+            return;
+        }
+        ConsoleJurisdictionFileDto dto =
+                objectMapper.readValue(CONSOLE_JURISDICTION_FILE.toFile(), ConsoleJurisdictionFileDto.class);
+        if (dto.consoles == null) {
+            return;
+        }
+
+        int taggedStations = 0;
+        for (ConsoleEntryDto entry : dto.consoles) {
+            taggedStations += applyConsoleEntry(entry);
+        }
+        log.info("관제 콘솔 담당구간 반영 완료: {}개 콘솔, 역 {}건 태깅", dto.consoles.size(), taggedStations);
+    }
+
+    @Transactional
+    int applyConsoleEntry(ConsoleEntryDto entry) {
+        Optional<Line> lineOpt = lineRepository.findByNameAndSegmentLabel(entry.lineName, entry.segmentLabel);
+        if (lineOpt.isEmpty()) {
+            log.warn(
+                    "관제 콘솔 {}: 노선을 찾을 수 없음 ({}{})",
+                    entry.consoleCode,
+                    entry.lineName,
+                    entry.segmentLabel != null ? " / " + entry.segmentLabel : "");
+            return 0;
+        }
+
+        List<LineStation> ordered =
+                lineStationRepository.findByLine_IdWithStationOrderBySequenceNoAsc(lineOpt.get().getId());
+        int tagged = 0;
+        for (RangeDto range : entry.ranges) {
+            int startIdx = indexOfStation(ordered, range.startStation);
+            int endIdx = indexOfStation(ordered, range.endStation);
+            if (startIdx < 0 || endIdx < 0) {
+                log.warn(
+                        "관제 콘솔 {}: 구간 역을 찾을 수 없음 ({} ~ {})",
+                        entry.consoleCode,
+                        range.startStation,
+                        range.endStation);
+                continue;
+            }
+            int from = Math.min(startIdx, endIdx);
+            int to = Math.max(startIdx, endIdx);
+            for (int i = from; i <= to; i++) {
+                tagConsole(ordered.get(i).getStation(), entry.consoleCode);
+                tagged++;
+            }
+        }
+        return tagged;
+    }
+
+    private int indexOfStation(List<LineStation> ordered, String stationName) {
+        for (int i = 0; i < ordered.size(); i++) {
+            if (ordered.get(i).getStation().getName().equals(stationName)) {
+                return i;
+            }
+        }
+        return -1;
+    }
+
+    /** 이미 다른 콘솔이 태깅된 역이면 콤마로 이어붙인다(예: 경부선 서울~금천구청처럼 콘솔 구간이 겹치는 경우). */
+    private void tagConsole(Station station, String consoleCode) {
+        String existing = station.getControlConsole();
+        if (existing == null) {
+            station.setControlConsole(consoleCode);
+            stationRepository.save(station);
+        } else if (!List.of(existing.split(",\\s*")).contains(consoleCode)) {
+            station.setControlConsole(existing + ", " + consoleCode);
+            stationRepository.save(station);
+        }
     }
 
     @Transactional
@@ -162,5 +245,25 @@ public class DataSeeder implements ApplicationRunner {
         public String stationType;
         public Boolean isKtxStop;
         public String remarks;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    static class ConsoleJurisdictionFileDto {
+        public List<ConsoleEntryDto> consoles;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    static class ConsoleEntryDto {
+        public String consoleCode;
+        public String lineName;
+        public String segmentLabel;
+        public List<RangeDto> ranges;
+        public String note;
+    }
+
+    @JsonIgnoreProperties(ignoreUnknown = true)
+    static class RangeDto {
+        public String startStation;
+        public String endStation;
     }
 }

@@ -128,8 +128,10 @@ function buildHeader(detail) {
   title.textContent = detail.name;
   header.appendChild(title);
 
-  const meta = document.createElement("div");
-  meta.className = "detail-meta";
+  if (detail.controlConsole) {
+    header.appendChild(buildConsoleBadge(detail.controlConsole));
+  }
+
   const parts = [];
   if (detail.stationType) {
     parts.push(STATION_TYPE_LABELS[detail.stationType] || detail.stationType);
@@ -137,10 +139,32 @@ function buildHeader(detail) {
   if (detail.isKtxStop) {
     parts.push("KTX 정차");
   }
-  meta.textContent = parts.length > 0 ? parts.join(" · ") : "역 종류 정보 없음";
-  header.appendChild(meta);
+  if (parts.length > 0) {
+    const meta = document.createElement("div");
+    meta.className = "detail-meta";
+    meta.textContent = parts.join(" · ");
+    header.appendChild(meta);
+  }
 
   return header;
+}
+
+/** 관제 콘솔 정보를 눈에 띄는 배지로 표시한다(일부 구간만 있는 참고용 정보라 강조가 필요). */
+function buildConsoleBadge(controlConsole) {
+  const badge = document.createElement("div");
+  badge.className = "detail-console-badge";
+
+  const label = document.createElement("span");
+  label.className = "detail-console-label";
+  label.textContent = "관제 콘솔";
+  badge.appendChild(label);
+
+  const value = document.createElement("span");
+  value.className = "detail-console-value";
+  value.textContent = controlConsole;
+  badge.appendChild(value);
+
+  return badge;
 }
 
 function buildLineCard(line) {
