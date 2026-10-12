@@ -3,6 +3,10 @@ services:
     build: .
     image: railroad-line:latest
     container_name: railroad-line
+    environment:
+      # Listen on every interface inside the container so the published port is reachable
+      SERVER_ADDRESS: 0.0.0.0
     ports:
-      - "8090:8090"
+      # Bind on all host interfaces (LAN/external access); override host port with HOST_PORT
+      - "0.0.0.0:${HOST_PORT:-8090}:8090"
     restart: unless-stopped

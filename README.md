@@ -80,10 +80,14 @@ docker compose up --build
 
 ```bash
 docker build -t railroad-line .
-docker run --rm -p 8090:8090 railroad-line
+docker run --rm -p 0.0.0.0:8090:8090 railroad-line
 ```
 
-`http://localhost:8090` 에서 접속할 수 있습니다. 이미지에는 `data/raw`(원본 노선/좌표 데이터)가
+`http://localhost:8090` 에서 접속할 수 있습니다. 포트는 호스트의 모든 인터페이스(`0.0.0.0`)에 바인딩되므로
+같은 네트워크의 다른 기기에서도 `http://<호스트 IP>:8090` 으로 접속할 수 있습니다(호스트 방화벽에서 8090 인바운드 허용 필요).
+호스트 포트를 바꾸려면 `HOST_PORT=9000 docker compose up` 처럼 지정합니다.
+
+이미지에는 `data/raw`(원본 노선/좌표 데이터)가
 함께 포함되며, H2 DB는 매 기동 시 그 원본으로부터 다시 만들어지는 파생 캐시라서 별도의
 영속 볼륨은 두지 않았습니다 — 컨테이너를 새로 띄워도 항상 최신 `data/raw` 내용으로 시작합니다.
 
